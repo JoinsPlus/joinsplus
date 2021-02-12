@@ -7,4 +7,4 @@ client.on("ready", () => {
     client.user.setActivity("mit Members", { type: 'PLAYING' });
 })
 
-client.login(config.token);
+client.login(process.env.TOKEN);
