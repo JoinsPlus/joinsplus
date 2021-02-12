@@ -7,3 +7,4 @@ client.on("ready", () => {
 })
 
 client.login(process.env.TOKEN);
+// hello hve
