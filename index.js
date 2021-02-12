@@ -10,4 +10,3 @@ client.on("message", message => {
     message.channel.send("Im working.")
 })
 client.login(process.env.TOKEN);
-// hello hve
