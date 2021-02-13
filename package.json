@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Nadelvorhang/joinsplus#readme",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "express": "^4.17.1",
     "mongoose": "^5.11.15"
   }
 }
