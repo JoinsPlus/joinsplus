@@ -18,7 +18,7 @@ client.on('message', async (msg) => {
             })
             await user.save()
         }
-        msg.reply(new Discord.MessageEmbed().setTitle("Profile Information").setAuthor(msg.member).addField("Coins", user.coins, true))
+        msg.reply(new Discord.MessageEmbed().setTitle("Profile Information").setThumbnail(msg.author.displayAvatarURL).setAuthor(msg.author.username).addField("Coins", user.coins, true))
     }
 })
 
