@@ -4,7 +4,7 @@ const db = require('./db')
 
 client.on("ready", () => {
     console.log("Logged into "+client.user.username)
-    client.user.setActivity("mit Members", { type: 'PLAYING' });
+    client.user.setActivity("mit Members", { type: 'PLAYING' })
 })
 
 client.on('message', async (msg) => {
@@ -18,7 +18,7 @@ client.on('message', async (msg) => {
             })
             await user.save()
         }
-        msg.reply(new Discord.MessageEmbed().setTitle("Profile Information").setAuthor(user).addField("Coins", user.coins, true))
+        msg.reply(new Discord.MessageEmbed().setTitle("Profile Information").setAuthor(msg.member).addField("Coins", user.coins, true))
     }
 })
 
