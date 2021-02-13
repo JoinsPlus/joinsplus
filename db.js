@@ -16,6 +16,18 @@ module.exports = {
         },
         /* idk what parameters u want here */
     }),
+    async getUser (id) {
+        let user = await this.User.findOne({
+            _id: id
+        })
+        if (!user) {
+            user = new this.User({
+                _id: id
+            })
+            await user.save()
+        }
+        return user
+    },
     Guild: mongoose.model('guild', {
         _id: {
             type: String,

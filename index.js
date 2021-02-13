@@ -9,16 +9,15 @@ client.on("ready", () => {
 
 client.on('message', async (msg) => {
     if (msg.content.toLocaleLowerCase() == "profile") {
-        let user = await db.User.findOne({
-            _id: msg.author.id
-        })
-        if (!user) {
-            user = new db.User({
-                _id: msg.author.id
-            })
-            await user.save()
-        }
+        let user = await db.getUser(msg.author.id)
         msg.reply(new Discord.MessageEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL()).addField("Coins", user.coins, true).setColor(1146986))
+    }
+    
+    if (msg.content.toLocaleLowerCase() == "freecoin") {
+        let user = await db.getUser(msg.author.id)
+        user.coins += 1
+        await user.save()
+        msg.reply("I've given you a coin, you now have " + user.coins + " coins")
     }
 })
 
