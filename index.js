@@ -26,8 +26,6 @@ client.on("ready", () => {
     client.user.setActivity("with Members", { type: 'PLAYING' })
 })
 
-
-
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
     if (!message.content.startsWith(process.env.PREFIX) || message.author.bot || message.channel.type === 'dm') return;
@@ -89,9 +87,6 @@ client.on('message', async (msg) => {
     }
 })
 
-
-
-
 // JUST FOR TESTING
 client.on("message", message => {
     if (process.env.ISDEBUG !== "true") return; //Only allows execution on beta bot
@@ -99,6 +94,5 @@ client.on("message", message => {
         message.channel.send("Its working.")
     }  
 })
-
 
 client.login(process.env.TOKEN);
