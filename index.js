@@ -1,5 +1,5 @@
 require('dotenv').config({
-    path: './vars'
+    path: './vars.env'
 })
 const Discord = require('discord.js')
 const client = new Discord.Client()
