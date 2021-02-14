@@ -9,6 +9,7 @@ client.on("ready", () => {
 })
 
 client.on('message', async (msg) => {
+    return;
     if (msg.content.toLocaleLowerCase() == "profile") {
         let user = await db.getUser(msg.author.id)
         msg.reply(new Discord.MessageEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL()).addField("Coins", user.coins, true).setColor(1146986))
