@@ -1,3 +1,4 @@
+require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const db = require('./db')
@@ -18,6 +19,13 @@ client.on('message', async (msg) => {
         user.coins += 1
         await user.save()
         msg.reply("I've given you a coin, you now have " + user.coins + " coins")
+    }
+    
+    if (msg.content.toLocaleLowerCase() == "loosecoin") {
+        let user = await db.getUser(msg.author.id)
+        user.coins -= 1
+        await user.save()
+        msg.reply("I've took a from you, you now have " + user.coins + " coins")
     }
 })
 
