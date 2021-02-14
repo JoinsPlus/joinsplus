@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div v-if="$store.state.showNav" id="nav">
       <h1>{{ $route.path }}</h1>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
