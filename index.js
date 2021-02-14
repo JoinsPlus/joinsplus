@@ -29,8 +29,13 @@ client.on('message', async (msg) => {
     }
 })
 
+
+
+
+// JUST FOR TESTING
 client.on("message", message => {
-    if(message.content != "test") return;
-    message.channel.send("Im working.")
+    if(message.content.toLocaleLowerCase() == "test"){
+        message.channel.send("Its working.")
+    }  
 })
 client.login(process.env.TOKEN);
