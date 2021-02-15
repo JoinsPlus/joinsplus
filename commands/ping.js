@@ -14,9 +14,9 @@ module.exports = {
             minutesms = ms % 60000; // 60*1000
             sec = Math.floor(minutesms / 1000);
         let str = "";
-        if (days) str = str + days + "d";
-        if (hours) str = str + hours + "h";
-        if (minutes) str = str + minutes + "m";
+        if (days) str = str + days + "d ";
+        if (hours) str = str + hours + "h ";
+        if (minutes) str = str + minutes + "m ";
         if (sec) str = str + sec + "s";
         return str;
             }
@@ -28,16 +28,11 @@ module.exports = {
         const pingembed2 = new Discord.MessageEmbed()
         .setTitle("Ping")
         .setAuthor(message.author.username, message.author.displayAvatarURL())
-        .setDescription(`Message Latency: ${msg.createdTimestamp - message.createdTimestamp}ms.\nWebsocket Latency: ${client.ws.ping}ms\nUptime: ${msToTime(client.uptime)}`)
+        .setThumbnail(client.user.displayAvatarURL())
+        .setDescription(`Message Latency: ${msg.createdTimestamp - message.createdTimestamp}ms.\nWebsocket Latency: ${client.ws.ping}ms\nUptime: ${msToTime(client.uptime)}\n[(click here for support)](${process.env.SUPPORT_LINK})`)
         .setColor(9807270)
         .setTimestamp(); 
-            msg.edit(pingembed2).catch((error) => {
-                message.reply(`\nSomething went Wrong:\n${error}`).catch((err) => {
-                    if(err) {
-                        return;
-                    }
-                });
-            });
+            msg.edit(pingembed2).catch((err) => {return;});
         }).catch((err) => {
             message.author.send(`there was an error trying to execute that command!\n\`${err}\``).catch((err) => {
                 if(err) {

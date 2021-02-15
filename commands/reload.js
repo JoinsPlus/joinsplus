@@ -1,10 +1,14 @@
-const fs = require('fs');
+const fs = require('fs')
+const allowed = [
+	'743183263710969913',
+	'706902380637192212'
+]
 
 module.exports = {
 	name: 'reload',
 	description: 'Reloads a command',
 	execute(message, args) {
-        if(message.author.id != ("743183263710969913" || "706902380637192212")) return;
+        if(!allowed.includes(message.author.id)) return;
         if(!args[0]) return message.channel.send("**CMD Name is missing!**")
         const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)

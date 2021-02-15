@@ -7,19 +7,22 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@vue/cli-service": "^4.5.11",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0",
-    "@vue/cli-service": "^4.5.11"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "vue-template-compiler": "^2.6.11"
+    "express-vue-dev": "^1.12.3",
+    "vue-builder": "^1.7.2",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^2.1.0-beta.25"
   },
   "browserslist": [
     "> 1%",

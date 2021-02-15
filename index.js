@@ -30,8 +30,10 @@ client.on('message', async (message) => {
 
 	const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
-    if (!client.commands.has(commandName)) return;
-    const command = client.commands.get(commandName);
+    const command = client.commands.get(commandName)
+		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
+	if (!command) return;
 
     //COOLDOWN PART
     if (!cooldowns.has(command.name)) {
@@ -73,16 +75,16 @@ client.on('message', async (msg) => {
     
     if (msg.content.toLocaleLowerCase() == "freecoin") {
         let user = await db.getUser(msg.author.id)
-        user.coins += 1
+        user.coins += 1000
         await user.save()
-        msg.reply("I've given you a coin, you now have " + user.coins + " coins")
+        msg.reply("I've given you a coin, you now have " + (user.coins/100) + " coins")
     }
     
     if (msg.content.toLocaleLowerCase() == "loosecoin") {
         let user = await db.getUser(msg.author.id)
-        user.coins -= 1
+        user.coins -= 1000
         await user.save()
-        msg.reply("I've took a from you, you now have " + user.coins + " coins")
+        msg.reply("I've took a from you, you now have " + (user.coins/100) + " coins")
     }
 })
 
