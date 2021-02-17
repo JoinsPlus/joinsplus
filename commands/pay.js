@@ -21,17 +21,31 @@ module.exports = {
                     .setDescription(`Your current balance is \`${user.coins / 100}\`.`)
                     .setColor(15158332)
                     .setTimestamp();
-                if (user.coins < parseInt(parseFloat(args[1])*100)) return message.channel.send(topoorembed).catch(err => { return; });
-                if(usertag.bot) return message.reply("Bots can't use Joins+.").catch(err => {return;})
-
-                user.coins -= parseInt(parseFloat(args[1])*100);
-                await user.save()
-                payuser.coins += parseInt(parseFloat(args[1])*100);
-                await payuser.save()
+                if (user.coins < parseInt(parseFloat(args[1]) * 100)) return message.channel.send(topoorembed).catch(err => { return; });
+                if (usertag.bot) return message.reply("Bots can't use Joins+.").catch(err => { return; })
+                
+                let awaitable = []
+                awaitable.push(db.User.updateOne({
+                    _id: user._id
+                }, {
+                    $inc: {
+                        coins: -parseInt(parseFloat(args[1]) * 100)
+                    }
+                }).exec())
+                awaitable.push(db.User.updateOne({
+                    _id: payuser._id
+                }, {
+                    $inc: {
+                        coins: +parseInt(parseFloat(args[1]) * 100)
+                    }
+                }).exec())
+                Promise.all(awaitable)
+                payuser = await db.getUser(usertag.id);
+                user = await db.getUser(message.author.id);
                 const payedembed = new Discord.MessageEmbed()
-                    .setTitle(`Paid ${parseInt(parseFloat(args[1])*100)/100} coin${parseInt(parseFloat(args[1])*100)/100 == 1 ? '' : 's'}.`)
+                    .setTitle(`Paid ${parseInt(parseFloat(args[1]) * 100) / 100} coin${parseInt(parseFloat(args[1]) * 100) / 100 == 1 ? '' : 's'}.`)
                     .setAuthor(message.author.username, message.author.displayAvatarURL())
-                    .setDescription(`Your balance: \`${user.coins/100}\`\nPaid users balance: \`${payuser.coins/100}\`\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
+                    .setDescription(`Your balance: \`${user.coins / 100}\`\nPaid users balance: \`${payuser.coins / 100}\`\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
                     .setColor(3066993)
                     .setTimestamp();
                 message.channel.send(payedembed).catch(err => { return; });

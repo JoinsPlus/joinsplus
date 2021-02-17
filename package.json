@@ -8,7 +8,7 @@
     "build": "npm i @vue/cli -g;cd vue;npm i;npm run build",
     "quickbuild": "cd vue;npm run build",
     "worker": "node .",
-    "web": "node web"
+    "web": "cd vue;node ."
   },
   "repository": {
     "type": "git",
