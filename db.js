@@ -1,7 +1,25 @@
 const mongoose = require('mongoose')
+const crypto = require('crypto')
+const NodeCache = require('node-cache')
+const guildStatCache = new NodeCache({
+    stdTTL: 600 //10 minute in seconds
+})
+
+const algorithm = 'aes-256-ctr';
+const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
+
+const encrypt = (text) => {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+  return {
+    iv: iv.toString('hex'),
+    content: encrypted.toString('hex')
+  };
+};
 
 mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@cluster0.pia0b.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`, {
-     useNewUrlParser: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
@@ -25,10 +43,14 @@ module.exports = {
                 type: Boolean,
                 default: false
             }
+        },
+        ignored: {
+            type: Array,
+            default: []
         }
         /* idk what parameters u want here */
     }),
-    async getUser (id) {
+    async getUser(id) {
         let user = await this.User.findOne({
             _id: id
         })
@@ -45,20 +67,27 @@ module.exports = {
             type: String,
             required: true
         },
-        coins: { /* The Number of Members that need to join the Server after they bought Ads */
-            type: Number,
-            default: 0
-        },
         name: {
             type: String,
             default: "No name set!"
+        },
+        description: {
+            type: String,
+            default: "This guild hasn't provided a description yet"
+        },
+        iconurl:{
+            type: String,
+            default: "https://yt3.ggpht.com/ytc/AAUvwniEUaBNWbH9Pk7A1cmIBdxnYt0YYrgNKx5h8grSMA=s176-c-k-c0x00ffffff-no-rj"
+        },
+        owner: {
+            type: String
         }
     }),
     async getGuild(id) {
         let guild = await this.Guild.findOne({
             _id: id
         })
-        if(!guild){
+        if (!guild) {
             guild = new this.Guild({
                 _id: id
             })
@@ -66,22 +95,53 @@ module.exports = {
         }
         return guild;
     },
-    Reward: mongoose.model('reward', { /* An instance of this is created when a user joins using our invite, and gets reversed if the user leaves. */
-        owner: { // The ID of the user
-            type: String,
-            required: true
+    Order: mongoose.model('order', {
+        owner: { /* The ID of the user who claims this order. An order is claimed when a user gets offered this all the way until the end of the required time to be in the guild */
+            type: String
         },
         guild: {
             type: String,
             required: true
         },
-        awards: {
-            type: Number,
-            required: true
+        completed: { /* Unix timestamp 1 Week after the user joins the guild, undefined if not joined */
+            type: Number
         },
-        expires: {
-            type: Number,
-            required: true
+        expires: { /* If user hasn't joined the guild after this, it gets released back into the pool of claimable orders */
+            type: Number
+        },
+        awarded: {
+            type: Number
         }
-    })
+    }),
+    captchaGen() {
+        let code = randomnum(1, 9)
+        let encrypted = encrypt(JSON.stringify([
+          code,
+          randomnum(25, 100),
+          randomnum(1, randomnum(1, 50)),
+          randomnum(-30, 15),
+          `${"#" + ((1 << 24) * Math.random() | 0).toString(16)}`,
+          randomnum(1, 50),
+          randomnum(0, 40),
+          randomnum(0, 40),
+          Date.now()
+        ]))
+        return {
+            url: `https://api.dojnaz.net/joinsplus/captcha/${encrypted.content}.${encrypted.iv}.jpg`, //.jpg is not needed, it's only so that cloudflare thinks it's a static image
+            code: code
+        }
+    },
+    async getGuildInvite() { //TODO: Call API
+        return new Promise(async (resolve, reject) => {
+            let guild = await this.getGuild('810480812662718484')
+            resolve(guild)
+        })
+    },
+    async guildStats(id) {
+        return new Promise((resolve, reject) => {
+            if (guildStatCache.has(id)) {
+                resolve(await Promise.resolve(guildStatCache.get(id))) 
+            }
+        })
+    }
 }

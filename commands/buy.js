@@ -15,7 +15,6 @@ module.exports = {
         let user = await db.getUser(message.author.id)
         let buyamount = parseInt(args[0])
         if (user.coins < buyamount * 100) return message.reply(`You didn't got enough Coins to buy Members.`).catch((err) => { return; });
-
         db.User.updateOne({
             _id: user._id
         }, {
@@ -23,25 +22,32 @@ module.exports = {
                 coins: -parseInt(args[0]) * 100
             }
         }).exec()
-        let guildz = await db.Guild.findOneAndUpdate({
-            _id: message.guild.id
-        }, {
-            $inc: {
-                coins: parseInt(args[0]) * 100
-            },
-            $set: {
-                name: message.guild.name
-            }
-        }).exec()
-        guildz.coins+=parseInt(args[0]) * 100
-
+        let orderAwaitables = []
+        for (let i = 0; i < parseInt(args[0]); i++) {
+            orderAwaitables.push(new db.Order({
+                guild: message.guild.id
+            }).save())
+        }
+        await Promise.all(orderAwaitables)
         let bought = new Discord.MessageEmbed()
             .setTitle(`Bought ${buyamount} Members.`)
             .setAuthor(message.author.username, message.author.displayAvatarURL())
-            .setDescription(`There are currently \`${guildz.coins / 100}\` invites pending for \`${guildz.name}\`.\nThis could take some time... Large orders have priority\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
+            .setDescription(`There are currently \`${await db.Order.countDocuments({
+                guild: message.guild.id
+            })}\` invites pending for \`${message.guild.name}\`.\nThis could take some time... Large orders have priority\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
             .setThumbnail(message.guild.iconURL())
             .setColor(9807270)
             .setTimestamp();
         message.channel.send(bought).catch(err => { return; })
+        await db.Guild.updateOne({
+            _id: message.guild.id
+        }, {
+            $set: {
+                iconurl: message.guild.iconURL({
+                    dynamic: true
+                }),
+                name: message.guild.name
+            }
+        })
     },
 }
