@@ -42,6 +42,12 @@ module.exports = {
       })
       console.log(guild)
       viewed.push(guild._id)
+      if(!guild.iconurl){
+        guild.iconurl = "https://yt3.ggpht.com/ytc/AAUvwniEUaBNWbH9Pk7A1cmIBdxnYt0YYrgNKx5h8grSMA=s176-c-k-c0x00ffffff-no-rj";
+      }
+      if(!guild.description){
+        guild.description = "This guild hasn't provided a description yet";
+      }
       menu.edit(new Discord.MessageEmbed().setTitle(`${guild.name}`).setDescription(guild.description).setFooter('✅ to join the guild, ⏩ to show another guild or ❌ to never show this again').setThumbnail(guild.iconurl).setColor(3066993)).catch((err) => {return;})
     }
     function handleReaction() {
@@ -84,7 +90,7 @@ module.exports = {
     const menu = await message.channel.send(settingUpEmbed)
     await menu.react("✅")
     await menu.react("⏩")
-    await menu.react("❌")
+    menu.react("❌")
 
     try {
       guildInvite() 

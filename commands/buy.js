@@ -39,15 +39,27 @@ module.exports = {
             .setColor(9807270)
             .setTimestamp();
         message.channel.send(bought).catch(err => { return; })
-        await db.Guild.updateOne({
-            _id: message.guild.id
-        }, {
-            $set: {
-                iconurl: message.guild.iconURL({
-                    dynamic: true
-                }),
-                name: message.guild.name
-            }
-        })
+        let iconurlz = message.guild.iconURL({
+            dynamic: true
+        });
+        if(!iconurlz){
+            await db.Guild.updateOne({
+                _id: message.guild.id
+            }, {
+                $set: {
+                    name: message.guild.name
+                }
+            })
+            return;
+        }else{
+            await db.Guild.updateOne({
+                _id: message.guild.id
+            }, {
+                $set: {
+                    iconurl: iconurlz,
+                    name: message.guild.name
+                }
+            })
+        }
     },
 }

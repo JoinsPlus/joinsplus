@@ -3,7 +3,7 @@ const db = require('../db')
 module.exports = {
     name: 'coins',
     description: 'Shows Users current Coins',
-    aliases: ['bal', 'b', 'balance'],
+    aliases: ['bal', 'b', 'balance', 'money'],
     cooldown: 2,
     async execute(message, args, client) {
         if (!args[0]) {

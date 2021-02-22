@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const crypto = require('crypto')
-const NodeCache = require('node-cache')
+const NodeCache = require('node-cache');
+const { settings } = require('cluster');
 const guildStatCache = new NodeCache({
     stdTTL: 600 //10 minute in seconds
 })
@@ -71,17 +72,19 @@ module.exports = {
             type: String,
             default: "No name set!"
         },
-        description: {
-            type: String,
-            default: "This guild hasn't provided a description yet"
-        },
         iconurl:{
-            type: String,
-            default: "https://yt3.ggpht.com/ytc/AAUvwniEUaBNWbH9Pk7A1cmIBdxnYt0YYrgNKx5h8grSMA=s176-c-k-c0x00ffffff-no-rj"
+            type: String
         },
         owner: {
             type: String
-        }
+        },
+        description: {
+            type: String
+        },
+        ignoredchannel: {
+            type: Array,
+            default: []
+        },
     }),
     async getGuild(id) {
         let guild = await this.Guild.findOne({
@@ -133,14 +136,14 @@ module.exports = {
     },
     async getGuildInvite() { //TODO: Call API
         return new Promise(async (resolve, reject) => {
-            let guild = await this.getGuild('810480812662718484')
+            let guild = await this.getGuild('809771579910127656')
             resolve(guild)
         })
     },
     async guildStats(id) {
         return new Promise((resolve, reject) => {
             if (guildStatCache.has(id)) {
-                resolve(await Promise.resolve(guildStatCache.get(id))) 
+               // resolve(await Promise.resolve(guildStatCache.get(id))) 
             }
         })
     }

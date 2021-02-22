@@ -1,6 +1,6 @@
 require('dotenv').config()
 const Discord = require('discord.js')
-const client = new Discord.Client()
+const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" }} })
 client.commands = new Discord.Collection();
 
 const db = require('./db')
@@ -22,6 +22,7 @@ for (const file of commandFiles) {
 // CLIENT READY EVENT
 client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
+    client.user.setActivity(`with ${client.guilds.cache.size} Servers | ${process.env.PREFIX}help`, { type: 'PLAYING' })
     setInterval(() => {
         client.user.setActivity(`with ${client.guilds.cache.size} Servers | ${process.env.PREFIX}help`, { type: 'PLAYING' })
     }, 300000);
@@ -35,8 +36,9 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
-    if(message.content === "<@"+client.user.id+">"){
-        message.reply(`my prefix is \`${process.env.PREFIX}\`!`)
+    
+    if(message.content === "<@!"+client.user.id+">"){
+        message.reply(`try \`${process.env.PREFIX}help\`!`).catch((err) => {return;}) 
         return;
     }
     if (!message.content.startsWith(process.env.PREFIX) || message.author.bot || message.channel.type === 'dm') return;
@@ -107,6 +109,22 @@ client.on('message', async (message) => {
         message.reply('Something went wrong.\n' + `\`${error}\``).catch(err => { return; })
     }
 
+})
+
+let checkedusers = [];
+client.on('message', async (message) => {
+    if(checkedusers.includes(message.author.id)) return;
+    checkedusers.push(message.author.id);
+    let user = await db.User.findOne({
+        _id: message.author.id
+    })
+    if (!user) {
+        user = new db.User({
+            _id: message.author.id
+        })
+        await user.save()
+    }
+    return;
 })
 
 // JUST FOR MARTIN TO SEE HOW DB WORKS
