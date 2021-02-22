@@ -38,6 +38,7 @@ module.exports = {
     let viewed = []
     async function guildInvite() {
       guild = await db.getGuildInvite({
+        userID: message.author.id,
         ignored: viewed
       })
       console.log(guild)
@@ -51,7 +52,7 @@ module.exports = {
       menu.edit(new Discord.MessageEmbed().setTitle(`${guild.name}`).setDescription(guild.description).setFooter('✅ to join the guild, ⏩ to show another guild or ❌ to never show this again').setThumbnail(guild.iconurl).setColor(3066993)).catch((err) => {return;})
     }
     function handleReaction() {
-      const collector = menu.createReactionCollector((reaction, user) => emojies.includes(reaction.emoji.name) && user.id === message.author.id, { max: 1, time: 60000 });
+      const collector = menu.createReactionCollector((reaction, user) => emojies.includes(reaction.emoji.name) && user.id === message.author.id, { max: 1, time: 20000 });
       let isUsed = false
       collector.on('collect', async (reaction, user) => {
         isUsed = true
@@ -90,7 +91,7 @@ module.exports = {
     const menu = await message.channel.send(settingUpEmbed)
     await menu.react("✅")
     await menu.react("⏩")
-    menu.react("❌")
+    await menu.react("❌")
 
     try {
       guildInvite() 

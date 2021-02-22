@@ -16,7 +16,7 @@ module.exports = {
             .setThumbnail(client.user.displayAvatarURL())
             .setTitle("ERROR!")
             .setColor(15158332)
-            .setDescription(`*+Incorrect usage!**\n${process.env.PREFIX}pay <MEMBER> <AMOUNT>`);
+            .setDescription(`**Incorrect usage!**\n❕ \`${process.env.PREFIX}pay <MEMBER> <AMOUNT>\``);
         if (args[0] && usertag) {
 
             if (!args[1]) return message.channel.send(Incorrect).catch(err => { return; });
@@ -60,7 +60,7 @@ module.exports = {
                     .setTimestamp();
                     console.log(usertag)*/
                 let payedembed = new Discord.MessageEmbed()
-                    .setTitle(`Successfully sent ${parseInt(parseFloat(args[1]) * 100) / 100} coin/s to ${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`)
+                    .setTitle(`Successfully sent ${parseInt(parseFloat(args[1]) * 100) / 100} coin${parseInt(parseFloat(args[1]) * 100) / 100 == 1 ? "" : "s"} to ${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`)
                     .setColor(3066993)
                     .addField(`${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`, `\`${payuser.coins / 100}\`🪙`, true)
                     .addField(`${message.guild.members.resolve(message.author.id) ? message.guild.members.resolve(message.author.id).displayName : client.users.resolve(message.author.id).username}`, `\`${user.coins / 100}\`🪙`, true)
@@ -71,6 +71,8 @@ module.exports = {
             } else {
                 message.channel.send(Incorrect).catch(err => { return; })
             }
+        }else {
+            message.channel.send(Incorrect).catch(err => { return; })
         }
     }
 }

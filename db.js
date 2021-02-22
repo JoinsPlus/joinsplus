@@ -5,18 +5,19 @@ const { settings } = require('cluster');
 const guildStatCache = new NodeCache({
     stdTTL: 600 //10 minute in seconds
 })
+const axios = require('axios').default
 
 const algorithm = 'aes-256-ctr';
 const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
 
 const encrypt = (text) => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-  return {
-    iv: iv.toString('hex'),
-    content: encrypted.toString('hex')
-  };
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+    return {
+        iv: iv.toString('hex'),
+        content: encrypted.toString('hex')
+    };
 };
 
 mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@cluster0.pia0b.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`, {
@@ -78,7 +79,7 @@ module.exports = {
             type: String,
             default: "No name set!"
         },
-        iconurl:{
+        iconurl: {
             type: String
         },
         owner: {
@@ -125,31 +126,38 @@ module.exports = {
     captchaGen() {
         let code = randomnum(1, 9)
         let encrypted = encrypt(JSON.stringify([
-          code,
-          randomnum(25, 100),
-          randomnum(1, randomnum(1, 50)),
-          randomnum(-30, 15),
-          `${"#" + ((1 << 24) * Math.random() | 0).toString(16)}`,
-          randomnum(1, 50),
-          randomnum(0, 40),
-          randomnum(0, 40),
-          Date.now()
+            code,
+            randomnum(25, 100),
+            randomnum(1, randomnum(1, 50)),
+            randomnum(-30, 15),
+            `${"#" + ((1 << 24) * Math.random() | 0).toString(16)}`,
+            randomnum(1, 50),
+            randomnum(0, 40),
+            randomnum(0, 40),
+            Date.now()
         ]))
         return {
             url: `https://api.dojnaz.net/joinsplus/captcha/${encrypted.content}.${encrypted.iv}.jpg`, //.jpg is not needed, it's only so that cloudflare thinks it's a static image
             code: code
         }
     },
-    async getGuildInvite() { //TODO: Call API
+    async getGuildInvite(requirements) { //TODO: Call API
         return new Promise(async (resolve, reject) => {
-            let guild = await this.getGuild('809771579910127656')
-            resolve(guild)
+            let encrypted = encrypt(JSON.stringify(requirements))
+            axios.get(`https://api.dojnaz.net/joinsplus/claimorder/${encrypted.content}.${encrypted.iv}`).then((response) => {
+                console.log(response.data)
+            }).catch((err) => {
+                console.log(`getGuildInvite HTTP Error: ${err.response.status}`)
+                return
+            })
+            /*let guild = await this.getGuild('809771579910127656')
+            resolve(guild)*/
         })
     },
     async guildStats(id) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (guildStatCache.has(id)) {
-               // resolve(await Promise.resolve(guildStatCache.get(id))) 
+                resolve(await Promise.resolve(guildStatCache.get(id)))
             }
         })
     }
