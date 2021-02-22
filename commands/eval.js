@@ -25,12 +25,12 @@ module.exports = {
                 if (typeof evaled !== "string") {
                     evaled = require("util").inspect(evaled);
                 }
-                message.channel.send(clean(evaled), { code: "xl" });
+                message.channel.send(clean(evaled), { code: "js" });
             } catch (error) {
                 if (typeof error != "string") {
-                    message.channel.send(clean(error), { code: "xl" })
+                    message.channel.send(clean(error), { code: "js" })
                 } else {
-                    message.channel.send(error, { code: "xl" })
+                    message.channel.send(error, { code: "js" })
                 }
             }
         }

@@ -25,13 +25,14 @@ module.exports = {
                     coins: -parseInt(args[0]) * 100
                 }
             }).exec()
-            let orderAwaitables = []
-            for (let i = 0; i < parseInt(args[0]); i++) {
-                orderAwaitables.push(new db.Order({
-                    guild: message.guild.id
-                }).save())
+            let orders = []
+            const template = {
+                guild: message.channel.guild.id
             }
-            await Promise.all(orderAwaitables)
+            for (let i = 0; i < parseInt(args[0]); i++) {
+                orders.push(template)
+            }
+            await db.Order.insertMany(orders)
             let bought = new Discord.MessageEmbed()
                 .setTitle(`Bought ${buyamount} Members.`)
                 .setAuthor(message.author.username, message.author.displayAvatarURL())
