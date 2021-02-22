@@ -15,51 +15,56 @@ module.exports = {
         let user = await db.getUser(message.author.id)
         let buyamount = parseInt(args[0])
         if (user.coins < buyamount * 100) return message.reply(`You didn't got enough Coins to buy Members.`).catch((err) => { return; });
-        db.User.updateOne({
-            _id: user._id
-        }, {
-            $inc: {
-                coins: -parseInt(args[0]) * 100
+        const started = new Date();
+        message.channel.send(new Discord.MessageEmbed().setTitle("Generating orders...").setColor(9807270)).then(async (msg) => {
+
+            db.User.updateOne({
+                _id: user._id
+            }, {
+                $inc: {
+                    coins: -parseInt(args[0]) * 100
+                }
+            }).exec()
+            let orderAwaitables = []
+            for (let i = 0; i < parseInt(args[0]); i++) {
+                orderAwaitables.push(new db.Order({
+                    guild: message.guild.id
+                }).save())
             }
-        }).exec()
-        let orderAwaitables = []
-        for (let i = 0; i < parseInt(args[0]); i++) {
-            orderAwaitables.push(new db.Order({
-                guild: message.guild.id
-            }).save())
-        }
-        await Promise.all(orderAwaitables)
-        let bought = new Discord.MessageEmbed()
-            .setTitle(`Bought ${buyamount} Members.`)
-            .setAuthor(message.author.username, message.author.displayAvatarURL())
-            .setDescription(`There are currently \`${await db.Order.countDocuments({
-                guild: message.guild.id
-            })}\` invites pending for \`${message.guild.name}\`.\nThis could take some time... Large orders have priority\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
-            .setThumbnail(message.guild.iconURL())
-            .setColor(9807270)
-            .setTimestamp();
-        message.channel.send(bought).catch(err => { return; })
-        let iconurlz = message.guild.iconURL({
-            dynamic: true
-        });
-        if(!iconurlz){
-            await db.Guild.updateOne({
-                _id: message.guild.id
-            }, {
-                $set: {
-                    name: message.guild.name
-                }
-            })
-            return;
-        }else{
-            await db.Guild.updateOne({
-                _id: message.guild.id
-            }, {
-                $set: {
-                    iconurl: iconurlz,
-                    name: message.guild.name
-                }
-            })
-        }
-    },
+            await Promise.all(orderAwaitables)
+            let bought = new Discord.MessageEmbed()
+                .setTitle(`Bought ${buyamount} Members.`)
+                .setAuthor(message.author.username, message.author.displayAvatarURL())
+                .setDescription(`There are currently \`${await db.Order.countDocuments({
+                    guild: message.guild.id
+                })}\` invites pending for \`${message.guild.name}\`.\nThis could take some time... Large orders have priority\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
+                .setThumbnail(message.guild.iconURL())
+                .setColor(9807270)
+                .setTimestamp();
+            const stopped = new Date();
+            bought.setFooter(`message took ${stopped - started}ms to send`);
+            msg.edit(bought).catch(err => { return; })
+            let iconurlz = message.guild.iconURL({
+                dynamic: true
+            });
+            if (!iconurlz) {
+                await db.Guild.updateOne({
+                    _id: message.guild.id
+                }, {
+                    $set: {
+                        name: message.guild.name
+                    }
+                })
+                return;
+            } else {
+                await db.Guild.updateOne({
+                    _id: message.guild.id
+                }, {
+                    $set: {
+                        iconurl: iconurlz,
+                        name: message.guild.name
+                    }
+                })
+            }
+        }).catch((err) => { return; })      },
 }
