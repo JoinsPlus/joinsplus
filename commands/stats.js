@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const db = require("../db")
+const os = require('os')
 module.exports = {
     name: 'stats',
     description: 'shows bots stats',
@@ -28,7 +29,7 @@ module.exports = {
             .setTitle("Bot statistics")
             .setAuthor(message.author.username, message.author.displayAvatarURL())
             .setThumbnail(client.user.displayAvatarURL())
-            .setDescription(`❗ **Library:** \`Discord.js - V12\`\n❕ **Ram Usage:** \`${Math.round(process.memoryUsage().heapUsed / 1048576)}mb/${Math.round(process.memoryUsage().heapTotal / 1048576)}mb\`\n❗ **CPU Usage:** \`${require('os').loadavg().toString()}%\`\n❗ **Uptime:** \`${msToTime(client.uptime)}\`\n❕ **Servers:** \`${client.guilds.cache.size}\`\n❗ **Users:** \`${client.guilds.cache.map(s => s.memberCount).reduce((a, b) => a + b)}\`\n❕ **Channels:** \`${client.channels.cache.size}\`\n\n[(click here for support)](${process.env.SUPPORT_LINK}) [(click here to invite the bot)](${process.env.INVITE_LINK})`)
+            .setDescription(`❗ **Library:** \`Discord.js - V12\`\n❕ **Ram Usage:** \`${Math.round((process.memoryUsage().heapUsed / 1048576)}mb/${Math.round(os.totalmem() / 1048576)}mb\`\n❗ **CPU Usage:** \`${os.loadavg()[0].toString()}%\`\n❗ **Uptime:** \`${msToTime(client.uptime)}\`\n❕ **Servers:** \`${client.guilds.cache.size}\`\n❗ **Users:** \`${client.guilds.cache.map(s => s.memberCount).reduce((a, b) => a + b)}\`\n❕ **Channels:** \`${client.channels.cache.size}\`\n\n[(click here for support)](${process.env.SUPPORT_LINK}) [(click here to invite the bot)](${process.env.INVITE_LINK})`)
             .setColor(9807270)
             .setTimestamp();
             const stopped = new Date();
