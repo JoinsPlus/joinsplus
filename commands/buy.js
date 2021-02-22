@@ -66,5 +66,6 @@ module.exports = {
                     }
                 })
             }
-        }).catch((err) => { return; })      },
+        }).catch((err) => { return; })
+    },
 }

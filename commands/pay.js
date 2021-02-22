@@ -23,7 +23,7 @@ module.exports = {
             if (!isNaN(args[1])) {
 
                 if (args[1] < 1) return message.channel.send(new Discord.MessageEmbed().setTitle("ERROR!").setDescription(`**Incorrect usage!**\nYou can't pay less than 1 coin.`).setAuthor(message.author.username, message.author.displayAvatarURL()).setThumbnail(client.user.displayAvatarURL()).setColor(15158332)).catch(err => { return; });
-                if(usertag.id == message.author.id) return message.channel.send(Incorrect).catch((err) => {return;})
+                if (usertag.id == message.author.id) return message.channel.send(Incorrect).catch((err) => { return; })
                 let user = await db.getUser(message.author.id)
                 let payuser = await db.getUser(usertag.id)
                 const topoorembed = new Discord.MessageEmbed()
@@ -64,14 +64,13 @@ module.exports = {
                     .setColor(3066993)
                     .addField(`${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`, `\`${payuser.coins / 100}\`🪙`, true)
                     .addField(`${message.guild.members.resolve(message.author.id) ? message.guild.members.resolve(message.author.id).displayName : client.users.resolve(message.author.id).username}`, `\`${user.coins / 100}\`🪙`, true)
+                    .setAuthor(message.author.username, message.author.displayAvatarURL())
                     .setTimestamp()
                 message.channel.send(payedembed).catch(err => { return; });
 
             } else {
                 message.channel.send(Incorrect).catch(err => { return; })
             }
-        } else {
-            message.channel.send(Incorrect).catch(err => { return; })
         }
-    },
-};
+    }
+}
