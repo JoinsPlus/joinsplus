@@ -113,18 +113,17 @@ client.on('message', async (message) => {
 
 let checkedusers = [];
 client.on('message', async (message) => {
-    if(checkedusers.includes(message.author.id)) return;
+    if (checkedusers.includes(message.author.id)) return;
     checkedusers.push(message.author.id);
-    let user = await db.User.findOne({
+    await db.User.updateOne({
         _id: message.author.id
-    })
-    if (!user) {
-        user = new db.User({
+    }, {
+        $set: {
             _id: message.author.id
-        })
-        await user.save()
-    }
-    return;
+        }
+    }, {
+        upsert: true
+    })
 })
 
 // JUST FOR MARTIN TO SEE HOW DB WORKS

@@ -29,7 +29,7 @@ module.exports = {
                 .setTitle("Ping")
                 .setAuthor(message.author.username, message.author.displayAvatarURL())
                 .setThumbnail(client.user.displayAvatarURL())
-                .setDescription(`Message Latency: ${msg.createdTimestamp - message.createdTimestamp}ms.\nWebsocket Latency: ${client.ws.ping}ms\nUptime: ${msToTime(client.uptime)}\n[(click here for support)](${process.env.SUPPORT_LINK})`)
+                .setDescription(`❗ **Message Latency:** \`${msg.createdTimestamp - message.createdTimestamp}ms\`\n❕ **Websocket Latency:** \`${client.ws.ping}ms\`\n❗ **Uptime:** \`${msToTime(client.uptime)}\`\n[(click here for support)](${process.env.SUPPORT_LINK})`)
                 .setColor(9807270)
                 .setTimestamp();
             msg.edit(pingembed2).catch((err) => { return; });

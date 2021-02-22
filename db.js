@@ -56,12 +56,18 @@ module.exports = {
             _id: id
         })
         if (!user) {
-            user = new this.User({
+            await this.User.updateOne({
                 _id: id
+            }, {
+                $set: {
+                    _id: id
+                }
+            }, {
+                upsert: true
             })
-            await user.save()
+            user = this.getUser(id)
         }
-        return user;
+        return user
     },
     Guild: mongoose.model('guild', {
         _id: {
