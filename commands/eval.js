@@ -9,6 +9,7 @@ const clean = text => {
     else
         return text;
 };
+const hastebin = require("hastebin-gen")
 const db = require('../db')
 module.exports = {
     name: 'eval',
@@ -25,12 +26,19 @@ module.exports = {
                 if (typeof evaled !== "string") {
                     evaled = require("util").inspect(evaled);
                 }
+                if(clean(evaled).length > 2000){
+                    message.channel.send("Smh... Response was too long!\n").catch((err) => {return;})
+                    return;
+                }
+                if(evaled.includes(process.env.TOKEN)) return message.reply("Response includes secret values!")
                 message.channel.send(clean(evaled), { code: "js" });
             } catch (error) {
                 if (typeof error != "string") {
                     message.channel.send(clean(error), { code: "js" })
+                    console.log(error)
                 } else {
                     message.channel.send(error, { code: "js" })
+                    console.log(error)
                 }
             }
         }

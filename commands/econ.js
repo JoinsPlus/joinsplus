@@ -1,0 +1,53 @@
+const Discord = require('discord.js');
+const allowed = [
+    '743183263710969913',
+    '706902380637192212'
+]
+const db = require('../db')
+module.exports = {
+    name: 'econ',
+    description: 'Ignores Users CMD',
+    async execute(message, args) {
+        if (!allowed.includes(message.author.id)) return;
+        if (allowed.includes(message.author.id)) {
+            if(!args[0]) return message.reply("No args given! (set/show/add/remove)").catch((err) => {return;})
+            if(args[0].toLowerCase() == "set"){
+                if(!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ set <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[1])) return message.reply(`ID missing! \`${process.env.PREFIX}econ set <ID> <COINS>\``).catch(err => {return;});
+                if(!args[2]) return message.reply(`Coins missing! \`${process.env.PREFIX}econ set <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[2])) return message.reply(`Coins missing! \`${process.env.PREFIX}econ set <ID> <COINS>\``).catch(err => {return;});
+                if(!message.guild.members.resolve(args[2]) ? !message.guild.members.resolve(args[2]) : !client.users.resolve(args[2])) return message.reply(`Can't find UserID in DB`).catch(err => {return;});
+                let user = await db.getUser(args[1])
+                user.coins = args[2];
+                await user.save()
+                message.reply("User has now" + (user.coins / 100) + " coins.").catch((err) => {return;})
+            }else if(args[0].toLowerCase() == "show"){
+                if(!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ show <ID>\``).catch(err => {return;});
+                if(isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ show <ID>\``).catch(err => {return;})
+                if(!message.guild.members.get(args[1]) ? !message.guild.members.get(args[1]) : !client.users.get(args[1])) return message.reply(`Can't find UserID in DB`).catch(err => {return;});
+                let user = await db.getUser(args[1])
+                message.reply("User has " + (user.coins / 100) + " coins.").catch((err) => {return;})
+            }else if(args[0].toLowerCase() == "add"){
+                if(!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ add <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[1])) return message.reply(`ID missing! \`${process.env.PREFIX}econ add <ID> <COINS>\``).catch(err => {return;});
+                if(!args[2]) return message.reply(`Coins missing! \`${process.env.PREFIX}econ add <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[2])) return message.reply(`Coins missing! \`${process.env.PREFIX}econ add <ID> <COINS>\``).catch(err => {return;});
+                if(!message.guild.members.resolve(args[2]) ? !message.guild.members.resolve(args[2]) : !client.users.resolve(args[2])) return message.reply(`Can't find UserID in DB`).catch(err => {return;});
+                let user = await db.getUser(args[1])
+                user.coins += args[2];
+                await user.save()
+                message.reply("User has now" + (user.coins / 100) + " coins.").catch((err) => {return;})
+            }else if(args[0].toLowerCase() == "remove"){
+                if(!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ remove <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[1])) return message.reply(`ID missing! \`${process.env.PREFIX}econ remove <ID> <COINS>\``).catch(err => {return;});
+                if(!args[2]) return message.reply(`Coins missing! \`${process.env.PREFIX}econ remove <ID> <COINS>\``).catch(err => {return;});
+                if(isNaN(args[2])) return message.reply(`Coins missing! \`${process.env.PREFIX}econ remove <ID> <COINS>\``).catch(err => {return;});
+                if(!message.guild.members.resolve(args[2]) ? !message.guild.members.resolve(args[2]) : !client.users.resolve(args[2])) return message.reply(`Can't find UserID in DB`).catch(err => {return;});
+                let user = await db.getUser(args[1])
+                user.coins -= args[2];
+                await user.save()
+                message.reply("User has now" + (user.coins / 100) + " coins.").catch((err) => {return;})
+            }
+        }
+    },
+};
