@@ -9,15 +9,27 @@ module.exports = {
      * @param {Discord.Message} message
      */
     async execute(message, args, client) {
-        if (!args[0]) return message.reply(`Wrong usage!\n${process.env.PREFIX}buy <AMOUNT>`).catch((err) => { return; });
-        if (isNaN(args[0])) return message.reply(`Wrong usage!\n${process.env.PREFIX}buy <MEMBERS>`).catch((err) => { return; });
-        if (args[0] < 8) return message.reply(`Wrong usage!\nYou can't buy less than 8 invites.`).catch((err) => { return; });
+        const errorembed = new Discord.MessageEmbed().setTitle("ERROR!").setColor(15158332).setTimestamp()
+        if (!args[0]) {
+            errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
+            return message.channel.send(errorembed).catch((err) => {return;})
+        }
+        if (isNaN(args[0])) {
+            errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
+            return message.channel.send(errorembed).catch((err) => {return;})
+        }
+        if (args[0] < 8) {
+            errorembed.setDescription(`**Wrong usage!**\n**You can't buy less than 8 invites.**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
+            return message.channel.send(errorembed).catch((err) => {return;})
+        }
         let user = await db.getUser(message.author.id)
         let buyamount = parseInt(args[0])
-        if (user.coins < buyamount * 100) return message.reply(`You didn't got enough Coins to buy Members.`).catch((err) => { return; });
+        if (user.coins < buyamount * 100) {
+            errorembed.setDescription("Your balance is too small to do this purchase.")
+            return message.channel.send(errorembed).catch((err) => {return;})
+        }
         const started = new Date();
         message.channel.send(new Discord.MessageEmbed().setTitle("Generating orders...").setColor(9807270)).then(async (msg) => {
-
             db.User.updateOne({
                 _id: user._id
             }, {
@@ -55,6 +67,8 @@ module.exports = {
                     $set: {
                         name: message.guild.name
                     }
+                }, {
+                    upsert: true
                 })
                 return;
             } else {
@@ -65,6 +79,8 @@ module.exports = {
                         iconurl: iconurlz,
                         name: message.guild.name
                     }
+                }, {
+                    upsert: true
                 })
             }
         }).catch((err) => { return; })

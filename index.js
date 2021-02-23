@@ -1,6 +1,10 @@
+process.on('unhandledRejection', (error, promise) => {
+    console.log(' Oh Lord! We forgot to handle a promise rejection here: ', promise);
+    console.log(' The error was: ', error);
+})
 require('dotenv').config()
 const Discord = require('discord.js')
-const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" }} })
+const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" } } })
 client.commands = new Discord.Collection();
 
 const db = require('./db')
@@ -36,9 +40,16 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
-    
-    if(message.content === "<@!"+client.user.id+">"){
-        message.reply(`try \`${process.env.PREFIX}help\`!`).catch((err) => {return;}) 
+    if (message.content === "<@!" + client.user.id + ">") {
+        if (AntiSpamCrashCooldown.has(message.author.id)) {
+            return;
+        } else {
+            AntiSpamCrashCooldown.add(message.author.id);
+            setTimeout(() => {
+                AntiSpamCrashCooldown.delete(message.author.id);
+            }, 400);
+        }
+        message.reply(`try \`${process.env.PREFIX}help\`!`).catch((err) => { return; })
         return;
     }
     if (!message.content.startsWith(process.env.PREFIX) || message.author.bot || message.channel.type === 'dm') return;
@@ -134,11 +145,22 @@ client.on('message', async (msg) => {
         msg.reply(new Discord.MessageEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL()).addField("Coins", user.coins, true).setColor(1146986))
     }
 
+    let banned = [
+        '768466612079689778'
+    ]
     if (msg.content.toLocaleLowerCase() == "freecoin") {
+        let awaitable = [];
+        if (banned.includes(msg.author.id)) return msg.reply("You're not allowed to use this command, sowwy!")
+        awaitable.push(db.User.updateOne({
+            _id: msg.author.id
+        }, {
+            $inc: {
+                coins: (1000)
+            }
+        }).exec())
+        await Promise.all(awaitable)
         let user = await db.getUser(msg.author.id)
-        user.coins += 1000
-        await user.save()
-        msg.reply("I've given you a coin, you now have " + (user.coins / 100) + " coins")
+        await msg.reply("I've given you a coin, you now have " + (user.coins / 100) + " coins")
     }
 
     if (msg.content.toLocaleLowerCase() == "loosecoin") {

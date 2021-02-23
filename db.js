@@ -88,7 +88,7 @@ module.exports = {
         description: {
             type: String
         },
-        ignoredchannel: {
+        ignoredChannels: {
             type: Array,
             default: []
         },
@@ -144,10 +144,12 @@ module.exports = {
     async getGuildInvite(requirements) { //TODO: Call API
         return new Promise(async (resolve, reject) => {
             let encrypted = encrypt(JSON.stringify(requirements))
-            axios.get(`https://api.dojnaz.net/joinsplus/claimorder/${encrypted.content}.${encrypted.iv}`).then((response) => {
-                console.log(response.data)
+            axios.get(`https://api.dojnaz.net/joinsplus${process.env.ISDEBUG === "true" ? "beta" : ""}/claimorder/${encrypted.content}.${encrypted.iv}`).then(async (response) => {
+                if (response.data.status) return resolve(response.data)
+                resolve(await this.getGuild(response.data.guild))
             }).catch((err) => {
-                console.log(`getGuildInvite HTTP Error: ${err.response.status}`)
+                console.log(`getGuildInvite HTTP Error: ${err.response ? err.response.status : err}`)
+                reject("Couldn't contact API")
                 return
             })
             /*let guild = await this.getGuild('809771579910127656')
