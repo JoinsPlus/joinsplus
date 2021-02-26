@@ -39,23 +39,44 @@ module.exports = {
                 message.channel.send(new Discord.MessageEmbed().setTitle("Changed description.").setDescription(`New description: \`${guild.description}\``).setColor(3066993)).catch((err) => { return; })
             }
         } else if (args[0].toLowerCase() == "ignorechannel") {
-            if (!args[1]) return message.reply(`Missing information! (add/list/remove)`)
+            if (!args[1]) {
+                errorembed.setDescription(`**Missing argument!**\nAvaiable arguments:\n \`add/list/remove\``)
+                return message.channel.send(errorembed).catch((err) => { return; })
+            }
             if (args[1].toLowerCase() == "add") {
-                if (!args[2]) return message.reply(`missing ID! \`${process.env.PREFIX}settings ignorechannel add <CHANNEL-ID>\` *(If you don't know how to get the channel is just google it.)*`).catch((err) => { return; })
+                if (!args[2]) {
+                    errorembed.setDescription(`**missing ID!**\n\`${process.env.PREFIX}settings ignorechannel add <CHANNEL-ID>\` \n*(If you don't know how to get the channel ID just google it.)*`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 args[2] = args[2].replace("<", "").replace("#", "").replace(">", "")
-                if (isNaN(args[2])) return message.reply("IDs are only numbers. *(If you don't know how to get the channel id just google it.)*").catch((err) => { return; })
-                if (args[2].length > 19) return message.reply(`Wrong usage! \`${process.env.PREFIX}settings ignorechannel add <ID>\` *(If you don't know how to get the channel is just google it.)*`)
+                if (isNaN(args[2])) {
+                    errorembed.setDescription(`**Channel IDs are only numbers.**\n*(If you don't know how to get the channel id just google it.)`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
+                if (args[2].length > 19) {
+                    errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}settings ignorechannel add <ID>\`\n*(If you don't know how to get the channel ID just google it.)*`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 let channel = message.guild.channels.resolve(args[2])
-                if (!channel) return message.reply("This channel doesn't exist!").catch((err) => { return; })
-                if (channel.type != "text" && channel.type != "news") return message.reply("This is not a text channel!").catch((err) => { return; })
+                if (!channel) {
+                    errorembed.setDescription(`**Can't find channel**\n\`${args[2]}\``)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
+                if (channel.type != "text" && channel.type != "news") {
+                    errorembed.setDescription(`**The channel you selected is not a text channel!**\n\`${args[2]}\``)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 let guild = await db.getGuild(message.guild.id)
-                if (guild.ignoredChannels.includes(args[2])) return message.reply(`This channel is already ignored.`).catch((err) => { return; })
+                if (guild.ignoredChannels.includes(args[2])) {
+                    errorembed.setDescription(`**This channel is already ignored!**\n<#${args[2]}>`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 guild.ignoredChannels.push(args[2])
                 await guild.save()
-                message.channel.send(new Discord.MessageEmbed().setTitle("Added ignore channel.").setDescription(`Added: \`${args[2]}\``).setColor(3066993)).catch((err) => { return; })
+                client.db.purgeCachedGuild(guild._id)
+                message.channel.send(new Discord.MessageEmbed().setTitle("Added ignorechannel.").setDescription(`Added: \`${args[2]}\``).setColor(3066993)).catch((err) => { return; })
             } else if (args[1].toLowerCase() == "list") {
                 let guild = await db.getGuild(message.guild.id)
-                console.log(guild.ignoredChannels)
                 message.channel.send(`**Ignored channel IDs:**\n` + guild.ignoredChannels.map((channelID) => {
                     let channel = message.guild.channels.resolve(channelID)
                     if (channel) return `<#${channel.id}>`
@@ -63,12 +84,24 @@ module.exports = {
                 }).join("\n"))
                 //message.channel.send(idsinfo).catch((err) => {return;})
             } else if (args[1].toLowerCase() == "remove") {
-                if (!args[2]) return message.reply(`missing ID! \`${process.env.PREFIX}settings ignorechannel remove <CHANNEL-ID>\` *(If you don't know how to get the channel is just google it.)*`).catch((err) => { return; })
+                if (!args[2]) if (!args[2]) {
+                    errorembed.setDescription(`**missing ID!**\n\`${process.env.PREFIX}settings ignorechannel remove <CHANNEL-ID>\` \n*(If you don't know how to get the channel ID just google it.)*`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 args[2] = args[2].replace("<", "").replace("#", "").replace(">", "")
-                if (isNaN(args[2])) return message.reply("IDs are only numbers. *(If you don't know how to get the channel id just google it.)*").catch((err) => { return; })
-                if (args[2].length > 19) return message.reply(`Wrong usage! \`${process.env.PREFIX}settings ignorechannel remove <ID>\` *(If you don't know how to get the channel is just google it.)*`)
+                if (isNaN(args[2])) {
+                    errorembed.setDescription(`**Channel IDs are only numbers.**\n*(If you don't know how to get the channel id just google it.)`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
+                if (args[2].length > 19) {
+                    errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}settings ignorechannel add <ID>\`\n*(If you don't know how to get the channel ID just google it.)*`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 let guild = await db.getGuild(message.guild.id)
-                if (!guild.ignoredChannels.includes(args[2])) return message.reply(`This channel is not ignored.`).catch((err) => { return; })
+                if (!guild.ignoredChannels.includes(args[2])) {
+                    errorembed.setDescription(`**This channel is already ignored!**\n<#${args[2]}>`)
+                    return message.channel.send(errorembed).catch((err) => { return; })
+                }
                 await db.Guild.updateOne({
                     _id: message.guild.id
                 }, {
@@ -77,6 +110,7 @@ module.exports = {
                     }
                 })
                 await guild.save()
+                client.db.purgeCachedGuild(guild._id)
                 message.channel.send(new Discord.MessageEmbed().setTitle("Removed ignore channel.").setDescription(`Removed: \`${args[2]}\``).setColor(3066993)).catch((err) => { return; })
             }
         } else {

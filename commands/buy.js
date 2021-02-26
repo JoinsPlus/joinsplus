@@ -12,21 +12,21 @@ module.exports = {
         const errorembed = new Discord.MessageEmbed().setTitle("ERROR!").setColor(15158332).setTimestamp()
         if (!args[0]) {
             errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
-            return message.channel.send(errorembed).catch((err) => {return;})
+            return message.channel.send(errorembed).catch((err) => { return; })
         }
         if (isNaN(args[0])) {
             errorembed.setDescription(`**Wrong usage!**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
-            return message.channel.send(errorembed).catch((err) => {return;})
+            return message.channel.send(errorembed).catch((err) => { return; })
         }
         if (args[0] < 8) {
             errorembed.setDescription(`**Wrong usage!**\n**You can't buy less than 8 invites.**\n\`${process.env.PREFIX}buy <AMOUNT>\``)
-            return message.channel.send(errorembed).catch((err) => {return;})
+            return message.channel.send(errorembed).catch((err) => { return; })
         }
         let user = await db.getUser(message.author.id)
         let buyamount = parseInt(args[0])
         if (user.coins < buyamount * 100) {
             errorembed.setDescription("Your balance is too small to do this purchase.")
-            return message.channel.send(errorembed).catch((err) => {return;})
+            return message.channel.send(errorembed).catch((err) => { return; })
         }
         const started = new Date();
         message.channel.send(new Discord.MessageEmbed().setTitle("Generating orders...").setColor(9807270)).then(async (msg) => {
@@ -49,7 +49,15 @@ module.exports = {
                 .setTitle(`Bought ${buyamount} Members.`)
                 .setAuthor(message.author.username, message.author.displayAvatarURL())
                 .setDescription(`There are currently \`${await db.Order.countDocuments({
-                    guild: message.guild.id
+                    guild: message.guild.id,
+                    $or: [
+                        {
+                            awarded: null
+                        },
+                        {
+                            awarded: undefined
+                        }
+                    ]
                 })}\` invites pending for \`${message.guild.name}\`.\nThis could take some time... Large orders have priority\n[*(click here for support)*](${process.env.SUPPORT_LINK})`)
                 .setThumbnail(message.guild.iconURL())
                 .setColor(9807270)

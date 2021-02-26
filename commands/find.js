@@ -49,7 +49,7 @@ module.exports = {
         ignored: viewed
       })
       if (guild.status) {
-        menu.edit(new Discord.MessageEmbed().setTitle("We're all out!").setColor(15158332).setTimestamp().setDescription(guild.status)).setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Red_X.svg/768px-Red_X.svg.png");
+        menu.edit(new Discord.MessageEmbed().setTitle("We're all out!").setColor(15158332).setTimestamp().setDescription(guild.status).setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Red_X.svg/768px-Red_X.svg.png"));
         menu.reactions.removeAll()
         return
       }
@@ -73,7 +73,7 @@ module.exports = {
           //JOIN SERVER & ADD COIN TO MEMBER & SET OWNER OF ORDER TO THIS GUY
           //client.guilds.resolve('810480812662718484').addMember()
           menu.reactions.resolve('✅').users.remove(user.id).catch((err) => { return; })
-          menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Joining ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1')).setColor(9807270)
+          menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Joining ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
           await sleep(2500)
           guildInvite()
         } else if (reaction.emoji.name === "⏩") {

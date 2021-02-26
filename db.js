@@ -5,6 +5,9 @@ const { settings } = require('cluster');
 const guildStatCache = new NodeCache({
     stdTTL: 600 //10 minute in seconds
 })
+const guildCache = new NodeCache({
+    stdTTL: 600 //10 minute in seconds
+})
 const axios = require('axios').default
 
 const algorithm = 'aes-256-ctr';
@@ -49,6 +52,18 @@ module.exports = {
         ignored: {
             type: Array,
             default: []
+        },
+        oauth: {
+            access_token: {
+                type: String
+            },
+            refresh_token: {
+                type: String
+            },
+            expires: {
+                type: Number,
+                default: 0
+            }
         }
         /* idk what parameters u want here */
     }),
@@ -162,5 +177,17 @@ module.exports = {
                 resolve(await Promise.resolve(guildStatCache.get(id)))
             }
         })
+    },
+    async getCachedGuild(id) {
+        return new Promise(async (resolve, reject) => {
+            if (guildCache.has(id)) return resolve(guildCache.get(id))
+            let guild = await this.getGuild(id)
+            guildCache.set(id, guild)
+            resolve(guild)
+        })
+    },
+    purgeCachedGuild(id) {
+        if (guildCache.has(id))
+            guildCache.del(id)
     }
 }

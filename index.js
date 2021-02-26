@@ -8,6 +8,7 @@ const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" 
 client.commands = new Discord.Collection();
 
 const db = require('./db')
+client.db = db
 const fs = require('fs')
 
 //COOLDOWN COLLECTION
@@ -37,7 +38,9 @@ client.on('messageReactionAdd', (reaction, user) => {
     //console.log(reaction.emoji.id);
 });
 
-
+//
+let IgnoreChannelIDs = [];
+let NotIgnoredChannelIDs = [];
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
     if (message.content === "<@!" + client.user.id + ">") {
@@ -61,6 +64,18 @@ client.on('message', async (message) => {
 
     if (!command) return;
 
+    //IGNORE CHANNEL CODE
+    let guild = await db.getCachedGuild(message.guild.id);
+    if (guild.ignoredChannels.includes(message.channel.id)) return;
+    /*if (!NotIgnoredChannelIDs.includes(message.channel.id)) {
+        NotIgnoredChannelIDs.push(message.channel.id)
+        if (IgnoreChannelIDs.includes(message.channel.id)) return;
+        let guildCHANNEL = await db.getGuild(message.guild.id);
+        if (guildCHANNEL.ignoredChannels.includes(message.channel.id)) {
+            IgnoreChannelIDs.push(message.channel.id)
+            return;
+        }
+    }*/
     //ANTISPAM AUTHOR COOLDOWN
     if (AntiSpamCrashCooldown.has(message.author.id)) {
         return;
