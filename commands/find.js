@@ -66,22 +66,33 @@ module.exports = {
     }
     function handleReaction() {
       const collector = menu.createReactionCollector((reaction, user) => emojies.includes(reaction.emoji.name) && user.id === message.author.id, { max: 1, time: 60000 });
+      client.fMenues.push(collector)
       let isUsed = false
       collector.on('collect', async (reaction, user) => {
+
         isUsed = true
         if (reaction.emoji.name === "✅") {
           //JOIN SERVER & ADD COIN TO MEMBER & SET OWNER OF ORDER TO THIS GUY
           //client.guilds.resolve('810480812662718484').addMember()
           menu.reactions.resolve('✅').users.remove(user.id).catch((err) => { return; })
           menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Joining ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
+          let dbUser = await db.getUser(user.id)
+          if (dbUser.oauth.access_token) {
+            menu.edit(new Discord.MessageEmbed().setTitle("Oof").setDescription(`You don't seem to be logged in. Please do that at ${process.env.REDIRECT_URL}`))
+            menu.reactions.removeAll().catch((err) => { return; })
+            return
+          }
           await sleep(2500)
           guildInvite()
         } else if (reaction.emoji.name === "⏩") {
           //SKIP SERVER & PRESAVE FOR THIS MENU SO IT DOENS'T GET SHOWED AGAIN WHILE USING THE SAME
+          menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Searching for a new guild`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
+          await sleep(1500)
           menu.reactions.resolve('⏩').users.remove(user.id).catch((err) => { return; })
           guildInvite()
         } else if (reaction.emoji.name === "❌") {
-          menu.reactions.resolve('❌').users.remove(user.id).catch((err) => { return; })
+          menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Blacklisting ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
+          await sleep(1500)
           await db.User.updateOne({
             _id: user.id
           },
@@ -91,6 +102,7 @@ module.exports = {
               }
             })
           //IGNORE SERVER FROM USERS LIST
+          menu.reactions.resolve('❌').users.remove(user.id).catch((err) => { return; })
           guildInvite()
         }
       })

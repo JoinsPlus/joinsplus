@@ -18,11 +18,6 @@ router.get('/login', (req, res) => {
             code: req.query.code,
             grantType: 'authorization_code',
             
-            /*scope: [
-                'guilds',
-                'identify',
-                'guilds.join'
-            ],*/
             redirectUri: decodeURIComponent(discordOAuth.redirect)
         }).then((data) => {
             console.log(data)
