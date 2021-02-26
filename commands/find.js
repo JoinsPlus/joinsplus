@@ -77,9 +77,9 @@ module.exports = {
           menu.reactions.resolve('✅').users.remove(user.id).catch((err) => { return; })
           menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Joining ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
           let dbUser = await db.getUser(user.id)
-          if (dbUser.oauth.access_token) {
-            menu.edit(new Discord.MessageEmbed().setTitle("Oof").setDescription(`You don't seem to be logged in. Please do that at ${process.env.REDIRECT_URL}`))
+          if (!dbUser.oauth.access_token) {
             menu.reactions.removeAll().catch((err) => { return; })
+            menu.edit(new Discord.MessageEmbed().setTitle("Oof").setDescription(`**You don't seem to be logged in. Please do that at** ${process.env.REDIRECT_URL}`).setColor(16580705))
             return
           }
           await sleep(2500)
@@ -115,12 +115,16 @@ module.exports = {
       });
     }
     const menu = await message.channel.send(settingUpEmbed)
+    let user = await db.getUser(message.author.id)
+    if (!user.oauth.access_token) {
+      menu.edit(new Discord.MessageEmbed().setTitle("You're not logged in!").setDescription(`**Please do that at ${process.env.REDIRECT_URL}**`).setColor(16580705))
+      return
+    }
+    for (let i = 0; i < user.ignored.length; i++)
+      viewed.push(user.ignored[i])
     await menu.react("✅")
     await menu.react("⏩")
     await menu.react("❌")
-    let user = await db.getUser(message.author.id)
-    for (let i = 0; i < user.ignored.length; i++)
-      viewed.push(user.ignored[i])
     console.log(viewed)
     try {
       guildInvite()

@@ -2,13 +2,7 @@ process.on('unhandledRejection', (error, promise) => {
     console.log(' Oh Lord! We forgot to handle a promise rejection here: ', promise);
     console.log(' The error was: ', error);
 })
-Array.prototype.remove = function (key, value) {
-  const index = this.findIndex(obj => obj[key] === value);
-  return index >= 0 ? [
-      ...this.slice(0, index),
-      ...this.slice(index + 1)
-  ] : this;
-}
+
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" } } })
