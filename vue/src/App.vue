@@ -34,7 +34,9 @@ export default {
 }
 
 .login {
-  float: right;
+  position: absolute;
+  right: 18px;
+  top: 18px;
 }
 
 .logo {
