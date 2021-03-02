@@ -1,32 +1,57 @@
 <template>
   <div id="app">
     <div id="nav">
+      <img class="logo" src="./assets/logo.png" />
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/privacy">Privacy</router-link>
+      <router-link to="/dashboard" class="login">Dashboard</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
-<style>
+<script>
+export default {
+  data() {
+    return {};
+  },
+};
+</script>
+
+<style scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Nunito", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
 }
 
 #nav {
-  padding: 30px;
+  font-size: 18px;
+  padding: 10px;
+}
+
+.login {
+  float: right;
+}
+
+.logo {
+  margin: 7.5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
 }
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: rgb(211, 211, 211);
+  text-decoration: none;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #42b960;
 }
 </style>

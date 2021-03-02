@@ -4,7 +4,7 @@ const db = require('../db')
 module.exports = {
     name: 'buy',
     description: 'Buy Members',
-    cooldown: 5,
+    cooldown: 2,
     /**
      * @param {Discord.Message} message
      */

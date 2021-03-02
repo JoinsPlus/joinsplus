@@ -1,7 +1,13 @@
+const DiscordOauth2 = require("discord-oauth2")
+const { settings } = require('cluster')
+const NodeCache = require('node-cache')
 const mongoose = require('mongoose')
+const oauth = new DiscordOauth2({
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: encodeURIComponent(process.env.REDIRECT_URL)
+})
 const crypto = require('crypto')
-const NodeCache = require('node-cache');
-const { settings } = require('cluster');
 const guildStatCache = new NodeCache({
     stdTTL: 600 //10 minute in seconds
 })
@@ -189,5 +195,11 @@ module.exports = {
     purgeCachedGuild(id) {
         if (guildCache.has(id))
             guildCache.del(id)
+    },
+    refreshToken(user) {
+        oauth.tokenRequest({
+            grantType: 'refresh_token',
+            refreshToken: user.oauth.refresh_token
+        })
     }
 }

@@ -6,7 +6,7 @@ const db = require('../db')
 //   const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
 //   return decrpyted.toString();
 // };
-
+const menues = {}
 function randomnum(min, max) {
   if (isNaN(min || max)) return "Input needs to be a Number.";
   return Math.floor(Math.random() * (max - min) + min);
@@ -34,7 +34,7 @@ module.exports = {
   name: 'find',
   description: 'Find a Server to join 2.0',
   aliases: ['f', 'join', 'j'],
-  cooldown: process.env.ISDEBUG === "true" ? 5 : 30, //If it's the JoinsMinus bot, 5 second cooldown, otherwise 30
+  cooldown: process.env.ISDEBUG === "true" ? 1 : 20, //If it's the JoinsMinus bot, 5 second cooldown, otherwise 20
   /**
    * @param {Discord.Message} message
    * @param {String[]} args
@@ -53,7 +53,7 @@ module.exports = {
         menu.reactions.removeAll()
         return
       }
-      console.log(guild)
+      if (process.env.ISDEBUG === 'true') console.log(guild)
       viewed.push(guild._id)
       if (!guild.iconurl) {
         guild.iconurl = "https://yt3.ggpht.com/ytc/AAUvwniEUaBNWbH9Pk7A1cmIBdxnYt0YYrgNKx5h8grSMA=s176-c-k-c0x00ffffff-no-rj";
@@ -66,10 +66,10 @@ module.exports = {
     }
     function handleReaction() {
       const collector = menu.createReactionCollector((reaction, user) => emojies.includes(reaction.emoji.name) && user.id === message.author.id, { max: 1, time: 60000 });
-      client.fMenues.push(collector)
+      menues[message.author.id].collector = collector
       let isUsed = false
       collector.on('collect', async (reaction, user) => {
-
+        if (isUsed) return
         isUsed = true
         if (reaction.emoji.name === "✅") {
           //JOIN SERVER & ADD COIN TO MEMBER & SET OWNER OF ORDER TO THIS GUY
@@ -79,8 +79,11 @@ module.exports = {
           let dbUser = await db.getUser(user.id)
           if (!dbUser.oauth.access_token) {
             menu.reactions.removeAll().catch((err) => { return; })
-            menu.edit(new Discord.MessageEmbed().setTitle("Oof").setDescription(`**You don't seem to be logged in. Please do that at** ${process.env.REDIRECT_URL}`).setColor(16580705))
+            menu.edit(new Discord.MessageEmbed().setTitle("You're not logged in!").setDescription(`**Please do that at ${process.env.REDIRECT_URL}**`).setColor(16580705))
             return
+          }
+          if (dbUser.oauth.expires < Date.now()) {
+            db.refreshToken(dbUser)
           }
           await sleep(2500)
           guildInvite()
@@ -92,7 +95,6 @@ module.exports = {
           guildInvite()
         } else if (reaction.emoji.name === "❌") {
           menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Blacklisting ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
-          await sleep(1500)
           await db.User.updateOne({
             _id: user.id
           },
@@ -101,6 +103,7 @@ module.exports = {
                 ignored: guild.id
               }
             })
+          await sleep(1500)
           //IGNORE SERVER FROM USERS LIST
           menu.reactions.resolve('❌').users.remove(user.id).catch((err) => { return; })
           guildInvite()
@@ -109,10 +112,12 @@ module.exports = {
 
       collector.on('end', collected => {
         if (!isUsed) {
-          menu.edit(new Discord.MessageEmbed().setTitle(`Menu expired due to inactivity.`).setTimestamp().setColor(15158332)).catch((err) => { return; })
+          if (menues[message.author.id] && !menues[message.author.id].stopped)
+            menu.edit(new Discord.MessageEmbed().setTitle(`Menu expired due to inactivity.`).setTimestamp().setColor(15158332)).catch((err) => { return; })
           menu.reactions.removeAll().catch((err) => { return; })
+          delete menues[message.author.id]
         }
-      });
+      })
     }
     const menu = await message.channel.send(settingUpEmbed)
     let user = await db.getUser(message.author.id)
@@ -120,15 +125,26 @@ module.exports = {
       menu.edit(new Discord.MessageEmbed().setTitle("You're not logged in!").setDescription(`**Please do that at ${process.env.REDIRECT_URL}**`).setColor(16580705))
       return
     }
+    if (menues[message.author.id]) {
+      let menu = menues[message.author.id]
+      menu.stopped = true
+
+      if (menu.collector)
+        menu.collector.stop()
+
+      menu.message.edit(new Discord.MessageEmbed().setTitle("Menu closed").setColor(15158332))
+    }
+    menues[message.author.id] = {
+      message: menu
+    }
     for (let i = 0; i < user.ignored.length; i++)
       viewed.push(user.ignored[i])
+
     await menu.react("✅")
     await menu.react("⏩")
     await menu.react("❌")
-    console.log(viewed)
     try {
       guildInvite()
-      handleReaction()
     } catch (error) {
       return;
     }

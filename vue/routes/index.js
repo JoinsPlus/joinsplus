@@ -31,7 +31,7 @@ router.get('/login', (req, res) => {
                     user.oauth = {
                         access_token: data.access_token,
                         refresh_token: data.refresh_token,
-                        expires: Date.now() + (data.expires_in * 1000)
+                        expires: Date.now() + (data.expires_in * 1000) - 25000
                     }
                     user.save()
                 })

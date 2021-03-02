@@ -7,7 +7,6 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" } } })
 client.commands = new Discord.Collection();
-client.fMenues = []
 
 const db = require('./db')
 client.db = db
