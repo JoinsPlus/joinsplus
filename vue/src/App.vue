@@ -4,6 +4,7 @@
       <img class="logo" src="./assets/logo.png" />
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
+      <router-link to="/faq">FAQ</router-link> |
       <router-link to="/privacy">Privacy</router-link>
       <router-link to="/dashboard" class="login">Dashboard</router-link>
     </div>
