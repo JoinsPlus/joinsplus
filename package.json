@@ -31,7 +31,8 @@
     "hastebin-gen": "^2.0.5",
     "jimp": "^0.16.1",
     "mongoose": "^5.11.15",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "vue-markdown": "^2.2.4"
   },
   "devDependencies": {
     "express-vue-dev": "^1.12.3",
