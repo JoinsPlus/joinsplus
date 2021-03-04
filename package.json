@@ -7,19 +7,20 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i @vue/cli -g;cd vue;npm i;npm run build",
     "quickbuild": "cd vue;npm run build",
+    "cfbuild": "cd vue;npm run build",
     "worker": "node .",
     "web": "cd vue;node ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nadelvorhang/joinsplus.git"
+    "url": "git+https://github.com/joinsplus/joinsplus.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Nadelvorhang/joinsplus/issues"
+    "url": "https://github.com/joinsplus/joinsplus/issues"
   },
-  "homepage": "https://github.com/Nadelvorhang/joinsplus#readme",
+  "homepage": "https://github.com/joinsplus/joinsplus#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "crypto": "^1.0.1",
