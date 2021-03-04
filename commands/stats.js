@@ -31,6 +31,8 @@ module.exports = {
             .setThumbnail(client.user.displayAvatarURL())
             .setDescription(`❗ **Library:** \`Discord.js - V12\`\n❕ **Shard Ram Usage:** \`${Math.round((process.memoryUsage().heapUsed / 1048576))}MiB / ${Math.round((parseInt(process.env.MAXMEM) || os.totalmem()) / 1048576)}MiB\`\n❗ **Total Ram Usage** \`${Math.round(((os.totalmem() - os.freemem()) / 1048576))}MiB/${Math.round(os.totalmem() / 1048576)}MiB\`\n❕ **CPU Usage:** \`${os.loadavg()[0].toString()}%\`\n❗ **Uptime:** \`${msToTime(client.uptime)}\`\n❕ **Servers:** \`${client.guilds.cache.size}\`\n❗ **Users:** \`${client.guilds.cache.map(s => s.memberCount).reduce((a, b) => a + b)}\`\n❕ **Channels:** \`${client.channels.cache.size}\`\n\n[join support](${process.env.SUPPORT_LINK}) **|** [bot invite](${process.env.INVITE_LINK})`)
             .addField("Library:", `\`Discord.js - V12\``, true)
+            .addField("Shard Ram Usage:", `${Math.round((process.memoryUsage().heapUsed / 1048576))}MiB / ${Math.round((parseInt(process.env.MAXMEM) || os.totalmem()) / 1048576)}MiB`, true)
+            .addField("Total Ram Usage", `\`${Math.round(((os.totalmem() - os.freemem()) / 1048576))}MiB/${Math.round(os.totalmem() / 1048576)}MiB\``)
             .setColor(9807270)
             .setTimestamp();
             const stopped = new Date();
