@@ -187,7 +187,7 @@ client.on('message', async (msg) => {
     }
 })
 
-// JUST FOR TESTING
+// JUST FOR TESTING .
 client.on("message", message => {
     if (process.env.ISDEBUG !== "true") return; //Only allows execution on beta bot
     if (message.content.toLocaleLowerCase() == "test") {
