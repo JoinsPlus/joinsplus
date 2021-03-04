@@ -33,6 +33,7 @@ module.exports = {
             .addField("Library:", `\`Discord.js - V12\``, true)
             .addField("Shard Ram Usage:", `${Math.round((process.memoryUsage().heapUsed / 1048576))}MiB / ${Math.round((parseInt(process.env.MAXMEM) || os.totalmem()) / 1048576)}MiB`, true)
             .addField("Total Ram Usage", `\`${Math.round(((os.totalmem() - os.freemem()) / 1048576))}MiB/${Math.round(os.totalmem() / 1048576)}MiB\``)
+            .addField("CPU Usage:", `\`${os.loadavg()[0].toString()}%\``, true)
             .setColor(9807270)
             .setTimestamp();
             const stopped = new Date();
