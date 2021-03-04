@@ -22,6 +22,10 @@ module.exports = {
                 var data = args.join(' ')
                 message.delete().catch(err => { return; });
                 console.log(`[EVAL] ${message.author.username} | ${message.author.id} | ${message.content}`)
+
+                const msg = message
+                const client = message.client
+                
                 let evaled = eval(data);
                 if (typeof evaled !== "string") {
                     evaled = require("util").inspect(evaled);
