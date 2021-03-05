@@ -1,15 +1,21 @@
 const DiscordOauth2 = require("discord-oauth2")
-const db = require('../../db')
 const express = require('express')
 const oauth = new DiscordOauth2()
 const router = express.Router()
+const db = require('../../db')
+const cors = require('cors')
 const discordOAuth = {
     secret: process.env.CLIENT_SECRET,
     client_id: process.env.CLIENT_ID,
     redirect: encodeURIComponent(process.env.REDIRECT_URL)
 }
 
-router.get('/login', (req, res) => {
+const privateCors = {
+    origin: process.env.VUE_APP_API,
+    optionsSuccessStatus: 200
+}
+
+router.get('/login', cors(privateCors), (req, res) => {
     if (req.query.code) {
         oauth.tokenRequest({
             clientId: discordOAuth.client_id,

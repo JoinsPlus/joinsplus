@@ -24,7 +24,6 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-
 // CLIENT READY EVENT
 client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
