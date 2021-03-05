@@ -15,6 +15,10 @@ const privateCors = {
     optionsSuccessStatus: 200
 }
 
+router.get('/support', (req, res) => {
+    res.redirect(process.env.SUPPORT_LINK)
+})
+
 router.get('/login', cors(privateCors), (req, res) => {
     if (req.query.code) {
         oauth.tokenRequest({

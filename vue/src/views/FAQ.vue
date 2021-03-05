@@ -42,8 +42,9 @@ export default {
           _id: "whatisit",
           parent: "joinsp",
           title: "What is Joins+?",
-          content: "Joins+ is a way to find communities you would like to partake in, and get people to find your communities",
-        }
+          content:
+            "Joins+ is a way to find communities you would like to partake in, and get people to find your communities",
+        },
       ],
     };
   },
