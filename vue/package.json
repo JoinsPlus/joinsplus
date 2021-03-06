@@ -7,11 +7,14 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "connect-mongodb-session": "^2.4.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "discord-oauth2": "^2.6.0",
+    "express-session": "^1.17.1",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
+    "vue-async-computed": "^3.9.0",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },

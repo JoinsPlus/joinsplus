@@ -11,9 +11,15 @@ const discordOAuth = {
 }
 
 const privateCors = {
-    origin: process.env.VUE_APP_API,
+    origin: process.env.VUE_APP_MAIN,
     optionsSuccessStatus: 200
 }
+
+router.get('/', cors(), (req, res) => {
+    res.json({
+        hi: "there"
+    })
+})
 
 router.get('/support', (req, res) => {
     res.redirect(process.env.SUPPORT_LINK)

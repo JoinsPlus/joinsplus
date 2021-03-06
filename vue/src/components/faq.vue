@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="wrapper">
     <p v-on:click="toggle" class="clickable">
+      <i class="fas fa-sort-down" :class="open ? 'open' : ''"></i>
       <strong>{{ title }}</strong>
     </p>
     <vue-markdown class="qcontent" :class="open ? 'open' : ''">{{
@@ -36,8 +37,24 @@ export default {
 </script>
 
 <style scoped>
+.fas.fa-sort-down {
+  padding-right: 15px;
+  transition: transform .25s;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-lefT: 10px;
+  padding-right: 10px;
+  transform: translateX(-3px) rotate(-90deg);
+}
+.fas.fa-sort-down.open {
+  transform: translateY(-2px);
+}
 .clickable {
   cursor: pointer;
+  text-align: left;
+  padding-top: 15px;
+  margin-top: 0;
+  padding-left: 15px;
 }
 
 .wrapper {
@@ -49,7 +66,6 @@ export default {
 
 .category {
   padding: 5px;
-  background-color: #2f3136;
   border-radius: 8px;
   width: 100%;
   max-width: 100%;
@@ -61,7 +77,7 @@ export default {
   height: 0px;
   overflow: hidden;
   transition: height 0.5s;
-  transform: translateY(-25px);
+  /*transform: translateY(-25px);*/
 }
 
 .qcontent.open {
@@ -78,6 +94,10 @@ export default {
 </style>
 <style>
 .qcontent.open > p {
+  padding: 25px;
+  padding-top: 0;
   margin-bottom: 0;
+  margin-top: 0;
+  text-align: left;
 }
 </style>

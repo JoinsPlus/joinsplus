@@ -26,13 +26,20 @@ const routes = [
     component: () => import(/* webpackChunkName: "privacy" */ '../views/Privacy.vue')
   },
   {
+    path: '/login',
+    name: 'Login',
+    beforeEnter(to, from, next) {
+      console.log(process.env)
+      window.location.href = process.env.VUE_APP_API + "/login"
+    }
+  },
+  {
     path: '/support',
     name: 'Support Server',
     beforeEnter(to, from, next) {
       console.log(process.env)
       window.location.href = process.env.VUE_APP_SUPPORT_URL
-    },
-    component: () => import(/* webpackChunkName: "support" */ '../views/Support.vue')
+    }
   }
 ]
 
