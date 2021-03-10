@@ -1,4 +1,5 @@
 const DiscordOauth2 = require("discord-oauth2")
+const Session = require('./session')
 const express = require('express')
 const oauth = new DiscordOauth2()
 const router = express.Router()
@@ -15,10 +16,16 @@ const privateCors = {
     optionsSuccessStatus: 200
 }
 
-router.get('/', cors(), (req, res) => {
+router.get('/', cors(), Session.jwtMiddleWare, (req, res) => {
     res.json({
-        hi: "there"
+        hi: "there",
+        session: req.session
     })
+})
+
+router.get('/gen/:id', (req, res) => {
+    let session = new Session(req.params.id)
+    res.send(session.getJWT())
 })
 
 router.get('/support', (req, res) => {

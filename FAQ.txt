@@ -1,0 +1,39 @@
+What is actually Joins +.
+  
+It is a free-to-use discord bot made by `Demon Martin#0193` & `VB_Dojnaz#6167`.
+The bot's main function is to find new communities or build your own community with the help of the bot. Some people are getting frustrated because they can't grow their community to a good amount of users. Joins+ is one of the easiest ways to grow your community.
+
+
+Joins+ Bot not responding?
+
+If the Joins+ Bot is not responding it could have multiple reasons. 
+**Here are the most common reasons:**
+**1**. The bot doesn't have enough permissions to send messages and embeds.
+To fix this issue, give the bot a role with administrator permissions. Or use the command `-invite` then kick the bot and add it with the permissions it needs to your guild.
+**2**. The bot is offline. First, check if the bot is actually offline. You can check that by clicking on the profile picture of the Joins+ bot and checking if the dot bottom right is gray or green.
+If the bot is offline join the support discord by using the command `-support` or by [clicking here](https://joins.plus/support) and check the `📣・news` channel.
+**3**. Its possible that your bot access got revoked by a bot developer or administrator due to breaking any rules.
+
+Can't see Joins+ reactions?
+
+There are **2** possible issues.
+**1**. You have disabled `Show emoji reactions on messages` setting.
+ Check it by navigating to `User Settings > Text & Images > Show emoji reactions on messages`.
+ **2**. The bot doesn't own enough permissions to react to the message. To fix this issue, give the bot `Add Reactions` permissions.
+ 
+How to earn Coins?
+
+There are many ways to earn coins. 
+**The most common ways are listed here:**
+**1**. By using the `-find` command. *(First you need to log in by using `-login` or by [clicking here](https://joins.plus/login) to be able to use the command. 
+**2**. By using the `-daily` command which gives you every 24h **3 Coins**,
+**3**. By getting it gifted from a friend. *(You can gift coins with the `-pay <USER> <COINS>` command.
+**4**. Getting the coins from an event hosted on the support discord server [link](https://joins.plus/support). We have a daily public `guess the number` & more events hosted by our community.
+**5**. Winning a Giveaway hosted by us.
+
+Where to report bugs?
+
+If you found a bug you can report it by joining our discord support guild.
+To join us, use the `-support` command or [click here](https://joins.plus/login).
+
+
