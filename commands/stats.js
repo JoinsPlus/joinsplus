@@ -5,6 +5,10 @@ module.exports = {
     name: 'stats',
     description: 'shows bots stats',
     cooldown: 10,
+    /**
+     * @param {Discord.Message} message
+     * @param {Discord.Client} client
+     */
     async execute(message, args, client) {
         function msToTime(ms) {
             days = Math.floor(ms / 86400000); // 24*60*60*1000
@@ -30,33 +34,33 @@ module.exports = {
                 .setAuthor(message.author.username, message.author.displayAvatarURL())
                 .setThumbnail(client.user.displayAvatarURL())
                 .setDescription(`[join support](${process.env.SUPPORT_LINK}) **|** [bot invite](${process.env.INVITE_LINK})`)
+                .addField("Shard-ID", `\`${message.guild.shardID + 1}/${client.shard.count}\``)
                 .addField(":books: Library: :books: ", `\`Discord.js - V12\``)
                 .setColor(9807270)
                 .setTimestamp();
-    
-                const ShardGuilds = await client.shard.fetchClientValues('guilds.cache.size');
-                const ShardChannels = await client.shard.fetchClientValues('channels.cache.size');
-                const ShardMembers = await client.shard.broadcastEval('this.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)')
-                const totalGuilds = ShardGuilds.reduce((acc, guildCount) => acc + guildCount, 0);
-                const totalMembers = ShardMembers.reduce((acc, memberCount) => acc + memberCount, 0);
-                const totalChannels = ShardChannels.reduce((acc, memberCount) => acc + memberCount, 0);
-                statsinfo.addField("<:ram:817880611049046086> Node Ram Usage:", `\`${Math.round(((os.totalmem() - os.freemem()) / 1048576))}MiB\``, true)
-                statsinfo.addField("Shard Ram Usage: <:ram:817880611049046086>", `\`${Math.round((process.memoryUsage().heapUsed / 1048576))}MiB\``, true)
-                                
-                statsinfo.addField(" ⠀ ", " ⠀ ", false)
-                statsinfo.addField("<:server:817881613797949452> All-Servers:", `\`${totalGuilds}\``, true)
-                .addField("Shard-Servers: <:server:817881613797949452>", `\`${client.guilds.cache.size}\``,true)
-                
-                statsinfo.addField(" ⠀ ", " ⠀ ", false)
-                statsinfo.addField("<:joins:817882836882817076> All-Users:", `\`${totalMembers}\``, true)
+
+            const ShardGuilds = await client.shard.fetchClientValues('guilds.cache.size');
+            const ShardChannels = await client.shard.fetchClientValues('channels.cache.size');
+            const ShardMembers = await client.shard.broadcastEval('this.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)')
+            const totalGuilds = ShardGuilds.reduce((acc, guildCount) => acc + guildCount, 0);
+            const totalMembers = ShardMembers.reduce((acc, memberCount) => acc + memberCount, 0);
+            const totalChannels = ShardChannels.reduce((acc, memberCount) => acc + memberCount, 0);
+            statsinfo.addField("<:ram:817880611049046086> Node Ram Usage:", `\`${Math.round(((os.totalmem() - os.freemem()) / 1048576))}MiB\``, true)
+            statsinfo.addField("Shard Ram Usage: <:ram:817880611049046086>", `\`${Math.round((process.memoryUsage().heapUsed / 1048576))}MiB\``, true)
+            statsinfo.addField(" ⠀ ", " ⠀ ", false)
+            statsinfo.addField("<:server:817881613797949452> All-Servers:", `\`${totalGuilds}\``, true)
+                .addField("Shard-Servers: <:server:817881613797949452>", `\`${client.guilds.cache.size}\``, true)
+
+            statsinfo.addField(" ⠀ ", " ⠀ ", false)
+            statsinfo.addField("<:joins:817882836882817076> All-Users:", `\`${totalMembers}\``, true)
                 .addField("Shard-Users: <:joins:817882836882817076>", `\`${client.guilds.cache.map(s => s.memberCount).reduce((a, b) => a + b)}\``, true)
-                
-                statsinfo.addField(" ⠀ ", " ⠀ ", false)
-                statsinfo.addField("<:channel:817883067112095786> All-Channels:", `\`${totalChannels}\``, true)
+
+            statsinfo.addField(" ⠀ ", " ⠀ ", false)
+            statsinfo.addField("<:channel:817883067112095786> All-Channels:", `\`${totalChannels}\``, true)
                 .addField("Shard-Channels: <:channel:817883067112095786>", `\`${client.channels.cache.size}\``, true)
-                
-                statsinfo.addField(" ⠀ ", " ⠀ ", false)
-                statsinfo.addField("<:cpu:817881255432552489> CPU Usage: <:cpu:817881255432552489>", `\`${os.loadavg()[0].toString()}%\``, false)
+
+            statsinfo.addField(" ⠀ ", " ⠀ ", false)
+            statsinfo.addField("<:cpu:817881255432552489> CPU Usage: <:cpu:817881255432552489>", `\`${os.loadavg()[0].toString()}%\``, false)
                 .addField(":green_circle: Shard-Uptime: :green_circle:", `\`${msToTime(client.uptime)}\``, false)
 
             const stopped = new Date();

@@ -27,10 +27,7 @@ for (const file of commandFiles) {
 // CLIENT READY EVENT
 client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
-    client.user.setActivity(`with ${client.guilds.cache.size} Servers | ${process.env.PREFIX}help`, { type: 'PLAYING' })
-    setInterval(() => {
-        client.user.setActivity(`with ${client.guilds.cache.size} Servers | ${process.env.PREFIX}help`, { type: 'PLAYING' })
-    }, 300000);
+    client.user.setActivity(`with Members | ${process.env.PREFIX}help`, { type: 'PLAYING' })
 })
 
 
@@ -43,6 +40,7 @@ let IgnoreChannelIDs = [];
 let NotIgnoredChannelIDs = [];
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
+    if(client.shard.count != parseInt(process.env.SHARD_COUNT))
     if (message.content === "<@!" + client.user.id + ">") {
         if (AntiSpamCrashCooldown.has(message.author.id)) {
             return;

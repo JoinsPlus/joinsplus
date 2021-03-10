@@ -7,6 +7,7 @@ module.exports = {
     cooldown: 2,
     /**
      * @param {Discord.Message} message
+     * @param {Discord.Client} client
      */
     async execute(message, args, client) {
         const errorembed = new Discord.MessageEmbed().setTitle("ERROR!").setColor(15158332).setTimestamp()
