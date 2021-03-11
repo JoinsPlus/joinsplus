@@ -10,5 +10,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
-
-fetch(process.env.VUE_APP_API)

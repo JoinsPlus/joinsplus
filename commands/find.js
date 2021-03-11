@@ -97,12 +97,11 @@ module.exports = {
           menu.edit(new Discord.MessageEmbed().setTitle("Hold on!").setDescription(`Blacklisting ${guild.name}`).setThumbnail('https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1').setColor(9807270))
           await db.User.updateOne({
             _id: user.id
-          },
-            {
-              $push: {
-                ignored: guild.id
-              }
-            })
+          }, {
+            $push: {
+              ignored: guild.id
+            }
+          })
           await sleep(1500)
           //IGNORE SERVER FROM USERS LIST
           menu.reactions.resolve('❌').users.remove(user.id).catch((err) => { return; })

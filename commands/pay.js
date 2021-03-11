@@ -60,18 +60,32 @@ module.exports = {
                     .setTimestamp();
                     console.log(usertag)*/
                 let payedembed = new Discord.MessageEmbed()
-                    .setTitle(`Successfully sent ${parseInt(parseFloat(args[1]) * 100) / 100} coin${parseInt(parseFloat(args[1]) * 100) / 100 == 1 ? "" : "s"} to ${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`)
+                    .setTitle(`Successfully sent ${parseInt(parseFloat(args[1]) * 100) / 100} coin${parseInt(parseFloat(args[1]) * 100) / 100 == 1 ? "" : "s"} to ${payuser.username || payuser._id}`)
                     .setColor(3066993)
-                    .addField(`${message.guild.members.resolve(usertag.id) ? message.guild.members.resolve(usertag.id).displayName : client.users.resolve(usertag.id).username}`, `\`${payuser.coins / 100}\`🪙`, true)
-                    .addField(`${message.guild.members.resolve(message.author.id) ? message.guild.members.resolve(message.author.id).displayName : client.users.resolve(message.author.id).username}`, `\`${user.coins / 100}\`🪙`, true)
+                    .addField(`${payuser.username || payuser._id}`, `\`${payuser.coins / 100}\`🪙`, true)
+                    .addField(`${user.username || user._id}`, `\`${user.coins / 100}\`🪙`, true)
                     .setAuthor(message.author.username, message.author.displayAvatarURL())
                     .setTimestamp()
+                await db.User.updateOne({
+                    _id: user._id
+                }, {
+                    $push: {
+                        history: `[PAY] Paid ${args[1]} Coins to ${payuser.username || payuser._id}.`
+                    }
+                })
+                await db.User.updateOne({
+                    _id: payuser._id
+                }, {
+                    $push: {
+                        history: `[PAY] Received ${args[1]} Coins from ${user.username || user._id}.`
+                    }
+                })
                 message.channel.send(payedembed).catch(err => { return; });
 
             } else {
                 message.channel.send(Incorrect).catch(err => { return; })
             }
-        }else {
+        } else {
             message.channel.send(Incorrect).catch(err => { return; })
         }
     }

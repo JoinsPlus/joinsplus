@@ -46,9 +46,11 @@ router.get('/login', cors(privateCors), (req, res) => {
             console.log(data)
             oauth.getUser(data.access_token).then((user) => {
                 console.log(user)
+                let session = new Session(user.id)
                 res.json({
                     success: true,
-                    user: user
+                    user: user,
+                    jwt: session.getJWT()
                 })
                 db.getUser(user.id).then((user) => {
                     user.oauth = {

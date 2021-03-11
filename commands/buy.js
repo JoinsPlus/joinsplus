@@ -65,6 +65,13 @@ module.exports = {
                 .setTimestamp();
             const stopped = new Date();
             bought.setFooter(`message took ${stopped - started}ms to send`);
+            await db.User.updateOne({
+                _id: message.author.id
+            }, {
+                $push: {
+                    history: `[BUY] Bought ${buyamount} Members.`
+                }
+            })
             msg.edit(bought).catch(err => { return; })
             let iconurlz = message.guild.iconURL({
                 dynamic: true

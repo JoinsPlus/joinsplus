@@ -10,6 +10,8 @@ module.exports = {
     cooldown: 3,
     /**
      * @param {Discord.Message} message
+     * @param {String[]} args
+     * @param {Discord.Client} client
      */
     async execute(message, args, client) {
         // var sentembed = new Discord.MessageEmbed()
@@ -50,6 +52,13 @@ module.exports = {
                 .setThumbnail(client.user.displayAvatarURL())
                 .setColor(9807270)
                 .setTimestamp();
+                await db.User.updateOne({
+                    _id: message.author.id
+                }, {
+                    $push: {
+                        history: `[DAILY] Claimed 3 Coins.`
+                    }
+                })
             message.channel.send(coinsembed).catch(err => { return; })
         } else {
             const oncooldownembed = new Discord.MessageEmbed()

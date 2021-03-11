@@ -38,9 +38,11 @@ client.on('messageReactionAdd', (reaction, user) => {
 //
 let IgnoreChannelIDs = [];
 let NotIgnoredChannelIDs = [];
+var iii = 0;
 //COMMAND HANDLER EXECUTER
 client.on('message', async (message) => {
-    if(client.shard.count != parseInt(process.env.SHARD_COUNT))
+    if (client.shard.count != parseInt(process.env.SHARD_COUNT)) return;
+
     if (message.content === "<@!" + client.user.id + ">") {
         if (AntiSpamCrashCooldown.has(message.author.id)) {
             return;
@@ -136,6 +138,27 @@ client.on('message', async (message) => {
 })
 
 let checkedusers = [];
+client.on('userUpdate', async (oldUser, newUser) => {
+    let fields = [
+        'username',
+        'discriminator'
+    ]
+    let set = {}
+    let update = false
+    for (let i = 0; i < fields.length; i++) {
+        if (oldUser[fields[i]] != newUser[fields[i]]) {
+            update = true
+            set[fields[i]] = newUser[fields[i]]
+        }
+    }
+    console.log(set)
+    if (update)
+        await db.User.updateOne({
+            _id: newUser.id
+        }, {
+            $set: set
+        })
+})
 client.on('message', async (message) => {
     if (checkedusers.includes(message.author.id)) return;
     checkedusers.push(message.author.id);
@@ -143,7 +166,10 @@ client.on('message', async (message) => {
         _id: message.author.id
     }, {
         $set: {
-            _id: message.author.id
+            _id: message.author.id,
+            username: message.author.username,
+            discriminator: message.author.discriminator,
+            bot: message.author.bot
         }
     }, {
         upsert: true

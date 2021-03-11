@@ -41,6 +41,15 @@ module.exports = {
             type: String,
             required: true
         },
+        username: {
+            type: String
+        },
+        discriminator: {
+            type: String
+        },
+        bot: {
+            type: Boolean
+        },
         coins: { /* The coins the user has */
             type: Number,
             default: 0
@@ -70,6 +79,10 @@ module.exports = {
                 type: Number,
                 default: 0
             }
+        },
+        history: {
+            type: Array,
+            default: []
         }
         /* idk what parameters u want here */
     }),
