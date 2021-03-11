@@ -1,6 +1,6 @@
 <template>
   <div>
-    <br>
+    <br />
     <h2>Signing in...</h2>
     <img src="https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1" />
   </div>
@@ -10,7 +10,10 @@
 // @ is an alias to /src
 export default {
   name: "Login",
-  onMoun
+  mounted() {
+    fetch(this.$data.api + "/login?code=" + encodeURIComponent(this.$router.currentRoute.query.code));
+  },
+  methods: {},
   components: {},
   data() {
     return {

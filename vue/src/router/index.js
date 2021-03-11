@@ -1,11 +1,13 @@
 import Vue from 'vue'
+
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
-import FAQ from '../views/FAQ.vue'
-import Privacy from '../views/Privacy.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Privacy from '../views/Privacy.vue'
+import About from '../views/About.vue'
 import Login from '../views/Login.vue'
+import Home from '../views/Home.vue'
+import FAQ from '../views/FAQ.vue'
+
 import store from '../store'
 
 Vue.use(VueRouter)
