@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/"
-        ><img class="logo" src="./assets/logo.png"
-      /></router-link>
+      <router-link to="/">
+        <img class="logo" src="./assets/logo.png" />
+      </router-link>
       <template v-if="!$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
@@ -13,11 +13,15 @@
       </template>
       <template v-if="$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/dashboard">Overview</router-link>
-        <router-link to="/dashboard/account" class="login"
-          ><img :src="$store.state.pfp" class="pfp" />{{
-            $store.state.username
-          }}</router-link
-        >
+        <a class="login">
+          <img :src="$store.state.pfp" class="pfp" />
+          {{ $store.state.username }}
+        </a>
+        <div class="menu">
+          <router-link to="/dashboard/account">Account</router-link>
+          <div class="menudiv"></div>
+          <a v-on:click="logout">Logout</a>
+        </div>
       </template>
     </div>
     <router-view />
@@ -29,6 +33,11 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    logout() {
+      this.$store.commit('l'gout))
+    }
+  }
 };
 </script>
 

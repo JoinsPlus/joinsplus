@@ -28,7 +28,11 @@ const encrypt = (text) => {
         content: encrypted.toString('hex')
     };
 };
-
+function randomnum(min, max) {
+    if (isNaN(min)) throw new Error(`\"${min}\" is not a number!`)
+    if (isNaN(max)) throw new Error(`\"${max}\" is not a number!`)
+    return Math.floor(Math.random() * (max - min) + min);
+}
 mongoose.connect(`mongodb+srv://${process.env.DBUSER}:${process.env.DBPASS}@cluster0.pia0b.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -181,16 +185,16 @@ module.exports = {
     //     }
     // }),
     captchaGen() {
-        let code = randomnum(1, 9)
+        let code = randomnum(1, 10)
         let encrypted = encrypt(JSON.stringify([
-            code,
-            randomnum(25, 100),
-            randomnum(1, randomnum(1, 50)),
-            randomnum(-30, 15),
-            `${"#" + ((1 << 24) * Math.random() | 0).toString(16)}`,
-            randomnum(1, 50),
-            randomnum(0, 40),
-            randomnum(0, 40),
+            code, //0
+            randomnum(25, 100), //1
+            randomnum(1, randomnum(1, 50)), //2
+            randomnum(-30, 15), //3
+            `${"#" + ((1 << 24) * Math.random() | 0).toString(16)}`, //4
+            randomnum(1, 50), //5
+            randomnum(0, 40), //6
+            randomnum(0, 40), //7
             Date.now()
         ]))
         return {

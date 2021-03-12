@@ -21,6 +21,12 @@ export default new Vuex.Store({
     setPfp(state, pfp) {
       localStorage.pfp = pfp
       state.pfp = pfp
+    },
+    logout(state) {
+      localStorage.clear()
+      state.username = ''
+      state.token = ''
+      state.pfp = ''
     }
   },
   actions: {

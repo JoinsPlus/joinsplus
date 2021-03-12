@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import store from '../store'
+import store from "../store";
 
 // @ is an alias to /src
 export default {
@@ -15,9 +15,9 @@ export default {
   data() {
     return {
       api: process.env.VUE_APP_API,
-      token: this.$store.state.token
+      token: this.$store.state.token,
     };
   },
 };
-console.log(store.state.token)
+console.log(store.state.token);
 </script>
