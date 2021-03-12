@@ -8,7 +8,8 @@ class Session {
     }
     getJWT() {
         return jws.sign({
-            id: this.id
+            id: this.id,
+            exp: Math.floor(Date.now() / 1000) + 86400
         }, secret)
     }
     static validateSession(jwt) {

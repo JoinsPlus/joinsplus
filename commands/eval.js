@@ -3,7 +3,7 @@ const allowed = [
     '743183263710969913',
     '706902380637192212'
 ]
-const clean = text => {
+const clean = async text => {
     if (typeof (text) === "string")
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
     else
@@ -26,7 +26,7 @@ module.exports = {
                 const msg = message
                 const client = message.client
                 
-                let evaled = eval(data);
+                let evaled = await eval(data);
                 if (typeof evaled !== "string") {
                     evaled = require("util").inspect(evaled);
                 }

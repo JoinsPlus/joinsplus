@@ -10,3 +10,6 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+window.$router = router
+window.$store = store

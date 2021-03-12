@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/"><img class="logo" src="./assets/logo.png" /></router-link>
+      <router-link to="/"
+        ><img class="logo" src="./assets/logo.png"
+      /></router-link>
       <template v-if="!$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
@@ -11,7 +13,11 @@
       </template>
       <template v-if="$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/dashboard">Overview</router-link>
-        <router-link to="/dashboard/account" class="login">{{$store.state.username}}</router-link>
+        <router-link to="/dashboard/account" class="login"
+          ><img :src="$store.state.pfp" class="pfp" />{{
+            $store.state.username
+          }}</router-link
+        >
       </template>
     </div>
     <router-view />
@@ -48,6 +54,14 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b960;
+}
+
+.pfp {
+  height: 35px;
+  float: left;
+  border-radius: 100%;
+  margin-right: 8px;
+  transform: translateY(-5px);
 }
 
 .login {

@@ -11,7 +11,14 @@
 export default {
   name: "Login",
   mounted() {
-    fetch(this.$data.api + "/login?code=" + encodeURIComponent(this.$router.currentRoute.query.code));
+    fetch(this.$data.api + "/login?code=" + encodeURIComponent(this.$router.currentRoute.query.code)).then((response) => {
+      response.json().then((data) => {
+        this.$store.commit('setToken', data.jwt)
+        this.$store.commit('setUsername', data.user.username)
+        this.$store.commit('setPfp', `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}`)
+        this.$router.push('/dashboard')
+      })
+    })
   },
   methods: {},
   components: {},

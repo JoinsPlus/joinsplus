@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>API is hosted at {{ api }}</p>
-    <p>Your API token is {{ token }}</p>
+    <p>Your API token is {{ $store.state.token }}</p>
   </div>
 </template>
 

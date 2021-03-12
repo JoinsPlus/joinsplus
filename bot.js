@@ -136,6 +136,9 @@ client.on('message', async (message) => {
     }
 
 })
+client.on('shardError', err => {
+    console.log(err)
+})
 
 let checkedusers = [];
 client.on('userUpdate', async (oldUser, newUser) => {

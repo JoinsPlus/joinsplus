@@ -157,6 +157,29 @@ module.exports = {
             type: Number
         }
     }),
+    // Boost: mongoose.model('boost', {
+    //     valid: {
+    //         type: Boolean,
+    //         default: true
+    //     },
+    //     owner: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     booster: {
+    //         type: String
+    //     }, 
+    //     guild: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     lastReward: {
+    //         type: Number
+    //     },
+    //     rewardCount: {
+    //         type: Number
+    //     }
+    // }),
     captchaGen() {
         let code = randomnum(1, 9)
         let encrypted = encrypt(JSON.stringify([
