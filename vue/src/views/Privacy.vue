@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>We, as most bots do, collect some data</h1>
-    <p>Below here is exactly what data we collect, and why we collect it. </p>
+    <h1>{{ $t("WeCollectData") }}</h1>
+    <p>{{ $t("WeCollectDataBelow") }}</p>
   </div>
 </template>

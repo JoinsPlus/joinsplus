@@ -1,7 +1,7 @@
 <template>
   <div>
     <br />
-    <h2>Signing in...</h2>
+    <h2>{{ $t("SigningIn") }}</h2>
     <img src="https://cdn.discordapp.com/emojis/780159108124901396.gif?v=1" />
   </div>
 </template>
@@ -11,14 +11,33 @@
 export default {
   name: "Login",
   mounted() {
-    fetch(this.$data.api + "/login?code=" + encodeURIComponent(this.$router.currentRoute.query.code)).then((response) => {
-      response.json().then((data) => {
-        this.$store.commit('setToken', data.jwt)
-        this.$store.commit('setUsername', data.user.username)
-        this.$store.commit('setPfp', `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}`)
-        this.$router.push('/dashboard')
+    fetch(
+      this.$data.api +
+        "/login?code=" +
+        encodeURIComponent(this.$router.currentRoute.query.code)
+    )
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            this.$store.commit("setToken", data.jwt);
+            this.$store.commit("setUsername", data.user.username);
+            this.$store.commit(
+              "setPfp",
+              `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}`
+            );
+            this.$router.push("/dashboard");
+          })
+          .catch((err) => {
+            this.$router.push("/login");
+          });
       })
-    })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Unable to contact API",
+        });
+      });
   },
   methods: {},
   components: {},

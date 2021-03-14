@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import API from '../api'
 
 Vue.use(Vuex)
 
@@ -7,7 +8,8 @@ export default new Vuex.Store({
   state: {
     token: localStorage.token,
     username: localStorage.username || 'Guest',
-    pfp: localStorage.pfp
+    pfp: localStorage.pfp,
+    api: new API(this)
   },
   mutations: {
     setToken(state, token) {
@@ -24,9 +26,7 @@ export default new Vuex.Store({
     },
     logout(state) {
       localStorage.clear()
-      state.username = ''
-      state.token = ''
-      state.pfp = ''
+      window.location.href = "/"
     }
   },
   actions: {

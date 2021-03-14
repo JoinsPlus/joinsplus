@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>Redirecting to Discord...</h1>
+    <h1>{{ $t("RedirectingToDiscord") }}</h1>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Frequently Asked Questions</h1>
+    <h1>{{ $t("FrequentlyAsked") }}</h1>
     <div class="wrapper">
       <div v-for="category in categories" :key="category._id" class="category">
         <p class="categoryTitle">
@@ -69,7 +69,7 @@ export default {
         {
           _id: "noreactions",
           parent: "trouble",
-          title: "I can't see any reactions",
+          title: "I can't see any reactions.",
           content:
             "There are **2** possible issues.\n**1**. You have disabled the `Show emoji reactions on messages` setting.\nCheck it by navigating to `User Settings > Text & Images > Show emoji reactions on messages`.\n**2**. The bot doesn't own enough permissions to react to the message. To fix this issue, give the bot `Add Reactions` permissions.",
         },
@@ -78,7 +78,7 @@ export default {
           parent: "coins",
           title: "What are coins?",
           content:
-            "Coins is the virtual currency of Joins+. Use the coins to order invitations to your guild, or give them to a friend",
+            "Coins are the virtual currency of Joins+. Use the coins to order invitations to your guild, or give them to a friend",
         },
         {
           _id: "howtoearn",
@@ -92,7 +92,7 @@ export default {
           parent: "misc",
           title: "How do I report bugs?",
           content:
-            "If you found a bug you can report it by joining our discord support guild.\nTo join us, use the `-support` command or [click here](https://joins.plus/login).",
+            "If you found a bug you can report it by joining our discord support guild.\nTo join us, use the `-support` command or [click here](https://joins.plus/support).",
         }
       ],
     };

@@ -201,6 +201,7 @@ client.on('userUpdate', async (oldUser, newUser) => {
 client.on('message', async (message) => {
     if (checkedusers.includes(message.author.id)) return;
     checkedusers.push(message.author.id);
+    await db.getUser(message.author.id)
     await db.User.updateOne({
         _id: message.author.id
     }, {

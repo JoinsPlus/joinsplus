@@ -35,13 +35,13 @@ module.exports = {
                         history: `[ADMIN] Admin set your Coins to ${coins / 100}.`
                     }
                 })
-                message.reply("User has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
+                message.reply(user.username+" has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
             } else if (args[0].toLowerCase() == "show") {
 
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ show <ID>\``).catch(err => { return; });
                 if (isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ show <ID>\``).catch(err => { return; })
                 let user = await db.getUser(args[1])
-                message.reply("User has " + (user.coins / 100) + " coins.").catch((err) => { return; })
+                message.reply(user.username+" has " + (user.coins / 100) + " coins.").catch((err) => { return; })
             } else if (args[0].toLowerCase() == "add") {
 
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ add <ID> <COINS>\``).catch(err => { return; });
@@ -59,7 +59,7 @@ module.exports = {
                         history: `[ADMIN] Admin added ${parseInt(parseFloat(args[2]) * 100) / 100} Coins to you.`
                     }
                 })
-                message.reply("User has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
+                message.reply(user.username+" has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
             } else if (args[0].toLowerCase() == "remove") {
 
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ remove <ID> <COINS>\``).catch(err => { return; });
@@ -84,14 +84,14 @@ module.exports = {
                 let user = await db.getUser(args[1])
                 user.daily.lastClaim = 0;
                 await user.save()
-                message.reply("Reseted Users daily cooldown!").catch((err) => { return; })
+                message.reply(`Reseted ${user.username} daily cooldown!`).catch((err) => { return; })
             } else if (args[0] == "resethistory") {
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; });
                 if (isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; })
                 let user = await db.getUser(args[1])
                 user.history = ["[ADMIN] History cleared."]
                 await user.save()
-                message.reply("Reseted Users history.").catch((err) => { return; })
+                message.reply(`Reseted ${user.username} history.`).catch((err) => { return; })
             } else if (args[0] == "history") {
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; });
                 if (isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; })
@@ -107,6 +107,20 @@ module.exports = {
                         fs.rm('./temp/history_' + user._id + '.json', (err) => { })
                     })
                 })
+            } else if (args[0] == "addhistory") {
+                if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ addhistory <ID> <MESSAGE>\``).catch(err => { return; });
+                if (isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ addhistory <ID> <MESSAGE>\``).catch(err => { return; })
+                if (!args[2]) return message.reply(`Message missing! \`${process.env.PREFIX}econ addhistory <ID> <MESSAGE>\``).catch(err => { return; });
+                let user = await db.getUser(args[1]) 
+                const adminmsg = args.slice(2).splice(" ")
+                await db.User.updateOne({
+                    _id: user._id
+                }, {
+                    $push: {
+                        history: `[ADMIN] Admin msg: ${adminmsg}`
+                    }
+                })
+                message.reply(`Added Admin message to ${user.username}. \n\`${adminmsg}\``).catch((err) => { return; })
             }
         }
     },

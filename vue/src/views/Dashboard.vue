@@ -19,5 +19,6 @@ export default {
     };
   },
 };
-console.log(store.state.token);
+
+//console.log(store.state.token);
 </script>
