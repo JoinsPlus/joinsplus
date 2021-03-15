@@ -27,16 +27,18 @@ for (const file of commandFiles) {
 // CLIENT READY EVENT
 client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
-    client.user.setActivity(`with Members | ${process.env.PREFIX}help (${message.guild.shardID + 1}/${process.env.SHARD_COUNT})`, { type: 'PLAYING' })
-}) 
+})
+client.on("shardReady", (id, unavaiable) => {
+    client.user.setActivity(`with Members | ${process.env.PREFIX}help | Shard: ${id + 1}`, { type: 'PLAYING' })
+})
 
 client.on('message', message => {
-    if(message.content == "spam") {
-       setInterval(() => {
-           const code = db.captchaGen()
-           if(code.code != 9) return;
-           message.channel.send(new Discord.MessageEmbed().setThumbnail(code.url))
-       }, 150);
+    if (message.content == "spam") {
+        setInterval(() => {
+            const code = db.captchaGen()
+            if (code.code != 9) return;
+            message.channel.send(new Discord.MessageEmbed().setThumbnail(code.url))
+        }, 150);
     }
     var a = 0;
     var b = 6;
@@ -53,8 +55,8 @@ client.on('message', message => {
                     a = 0;
                     robloxreel()
                 } else {
-                    if(a == b) return message.channel.send("**ERROR!**, try again later.")
-                    a+=a;
+                    if (a == b) return message.channel.send("**ERROR!**, try again later.")
+                    a += a;
                     message.channel.send(`Nearly finished! ${++a}/${b}`)
                     robloxreel()
                 }

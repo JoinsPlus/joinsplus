@@ -8,6 +8,7 @@
     "i18n": "node i18n"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "connect-mongodb-session": "^2.4.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
