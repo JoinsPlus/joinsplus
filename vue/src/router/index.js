@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import twemoji from 'twemoji'
 
 import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
@@ -68,6 +69,13 @@ router.beforeEach((to, from, next) => {
     if (!store.state.token) return window.location.href = process.env.VUE_APP_API + '/login'
   }
   next()
+})
+
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    console.log("parse")
+    twemoji.parse(document)
+  })
 })
 
 export default router

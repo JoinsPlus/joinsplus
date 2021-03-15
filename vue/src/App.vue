@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <LanguageSelect v-if="langSelect" :exit="changeLang" />
     <div id="nav">
       <router-link to="/">
         <img class="logo" src="./assets/logo.png" />
@@ -9,9 +10,19 @@
         <router-link to="/about">{{ $t("About") }}</router-link> |
         <router-link to="/faq">{{ $t("FAQ") }}</router-link> |
         <router-link to="/privacy">{{ $t("Privacy") }}</router-link>
-        <router-link to="/dashboard" class="login">
-          {{ $t("Dashboard") }}
-        </router-link>
+        <a class="login">
+          <router-link to="/dashboard">
+            {{ $t("Dashboard") }}
+          </router-link>
+          <a v-on:click="changeLang" class="langFlag">
+            <img
+              :src="`https://twemoji.maxcdn.com/v/13.0.2/72x72/${
+                flagReg[$i18n.locale] || flagReg['en']
+              }.png`"
+            />
+          </a>
+          <!-- 🇸🇪 -->
+        </a>
       </template>
       <template v-if="$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/dashboard">{{ $t("Overview") }}</router-link>
@@ -32,11 +43,10 @@
           </router-link>
           <br />
           <div class="spacer"></div>
-          <a>
+          <a v-on:click="changeLang">
             <i class="fas fa-language"></i>
             {{ $t("Language") }}
           </a>
-          <LanguageSelect v-if="langSelect" />
           <br />
           <div class="spacer"></div>
           <div class="menudiv"></div>
@@ -53,12 +63,14 @@
 
 <script>
 import LanguageSelect from "./components/LanguageSelect";
+import flagReg from "./flagReg";
 
 export default {
   data() {
     return {
-      menu: false,
       langSelect: false,
+      flagReg: flagReg,
+      menu: false,
     };
   },
   methods: {
@@ -100,6 +112,16 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b960;
+}
+
+.langFlag {
+  float: right;
+  transform: translateY(-9px);
+  margin-left: 8px;
+}
+
+.langFlag > img {
+  height: 40px;
 }
 
 .menu {
@@ -156,3 +178,12 @@ a {
   height: 50px;
 }
 </style>
+
+<style>
+.emoji {
+  height: 1rem;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+</style>
+

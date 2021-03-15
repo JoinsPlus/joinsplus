@@ -16,6 +16,11 @@ axios({
     let langs = response.data.result.languages.map((lang) => {
         return lang.code
     })
+    let names = {}
+    response.data.result.languages.map((lang) => {
+        names[lang.code] = lang.name
+    })
+    fs.writeFileSync('./src/i18nNames.json', JSON.stringify(names))
     let output = {}
     for (let i = 0; i < langs.length; i++) {
         output[langs[i]] = await exportLang(langs[i])

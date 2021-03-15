@@ -2,16 +2,14 @@
   <div class="wrapper">
     <p v-on:click="toggle" class="clickable">
       <i class="fas fa-sort-down" :class="open ? 'open' : ''"></i>
-      <strong>{{ title }}</strong>
+      <strong>{{ $t(title) }}</strong>
     </p>
-    <vue-markdown class="qcontent" :class="open ? 'open' : ''">{{
-      content
-    }}</vue-markdown>
+    <vue-markdown class="qcontent" v-if="open" :source="$t(content)" />
   </div>
 </template>
 
 <script>
-import VueMarkdown from "vue-markdown";
+import VueMarkdown from 'vue-markdown-render'
 
 // @ is an alias to /src
 export default {
@@ -39,10 +37,10 @@ export default {
 <style scoped>
 .fas.fa-sort-down {
   padding-right: 15px;
-  transition: transform .25s;
+  transition: transform 0.25s;
   padding-top: 7px;
   padding-bottom: 7px;
-  padding-lefT: 10px;
+  padding-left: 10px;
   padding-right: 10px;
   transform: translateX(-3px) rotate(-90deg);
 }
@@ -74,14 +72,10 @@ export default {
 
 .qcontent {
   margin-top: 0;
-  height: 0px;
+  height: fit-content;
   overflow: hidden;
   transition: height 0.5s;
   /*transform: translateY(-25px);*/
-}
-
-.qcontent.open {
-  height: fit-content;
 }
 
 .categoryTitle {
@@ -92,8 +86,9 @@ export default {
   height: fit-content;
 }
 </style>
+
 <style>
-.qcontent.open > p {
+.qcontent > p {
   padding: 25px;
   padding-top: 0;
   margin-bottom: 0;

@@ -10,7 +10,7 @@ Vue.use(VueI18n)
 Vue.config.productionTip = false
 
 const i18n = new VueI18n({
-  locale: 'de', // set locale
+  locale: localStorage.lang || 'en', // set locale
   fallbackLocale: 'en',
   messages, // set locale messages
 })
