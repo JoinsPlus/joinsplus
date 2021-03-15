@@ -27,7 +27,7 @@ for (const file of commandFiles) {
 // CLIENT READY EVENT
 client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
-    client.user.setActivity(`with Members | ${process.env.PREFIX}help`, { type: 'PLAYING' })
+    client.user.setActivity(`with Members | ${process.env.PREFIX}help (${message.guild.shardID + 1}/${process.env.SHARD_COUNT})`, { type: 'PLAYING' })
 }) 
 
 client.on('message', message => {
