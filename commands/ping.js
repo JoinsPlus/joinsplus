@@ -4,6 +4,10 @@ module.exports = {
     name: 'ping',
     description: 'Ping!',
     cooldown: 5,
+    /**
+       * @param {Discord.Message} message
+       * @param {Discord.Client} client
+       */
     async execute(message, args, client) {
         function msToTime(ms) {
             days = Math.floor(ms / 86400000); // 24*60*60*1000

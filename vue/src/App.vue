@@ -9,7 +9,9 @@
         <router-link to="/about">{{ $t("About") }}</router-link> |
         <router-link to="/faq">{{ $t("FAQ") }}</router-link> |
         <router-link to="/privacy">{{ $t("Privacy") }}</router-link>
-        <router-link to="/dashboard" class="login">{{ $t("Dashboard") }}</router-link>
+        <router-link to="/dashboard" class="login">
+          {{ $t("Dashboard") }}
+        </router-link>
       </template>
       <template v-if="$router.currentRoute.path.startsWith('/dashboard')">
         <router-link to="/dashboard">{{ $t("Overview") }}</router-link>
@@ -30,7 +32,12 @@
           </router-link>
           <br />
           <div class="spacer"></div>
-          <a><i class="fas fa-language"></i> {{ $t("Language") }}</a><br />
+          <a>
+            <i class="fas fa-language"></i>
+            {{ $t("Language") }}
+          </a>
+          <LanguageSelect v-if="langSelect" />
+          <br />
           <div class="spacer"></div>
           <div class="menudiv"></div>
           <a v-on:click="logout" class="logout">
@@ -45,10 +52,13 @@
 </template>
 
 <script>
+import LanguageSelect from "./components/LanguageSelect";
+
 export default {
   data() {
     return {
       menu: false,
+      langSelect: false,
     };
   },
   methods: {
@@ -59,8 +69,11 @@ export default {
       this.menu = !this.menu;
     },
     changeLang() {
-      
-    }
+      this.langSelect = !this.langSelect;
+    },
+  },
+  components: {
+    LanguageSelect,
   },
 };
 </script>
