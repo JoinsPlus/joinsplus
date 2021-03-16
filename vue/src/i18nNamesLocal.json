@@ -1,1 +1,14 @@
-{"en":"English","fr":"Français","de":"Deutsch","ja":"日本語","es":"Español","sv":"Svenska","tr":"Türk"}
+{
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "ja": "日本語",
+    "mk": "Македонски",
+    "bg": "Български",
+    "pt": "Português",
+    "es": "Español",
+    "sv": "Svenska",
+    "tr": "Türk",
+    "pirate": "Pirate speech",
+    "lol": "Lolcat"
+}

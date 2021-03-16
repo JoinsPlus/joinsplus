@@ -20,7 +20,6 @@ module.exports = {
                 .setColor(9807270)
                 .setTimestamp();
             let history = user.history.toObject();
-            console.log(history.length)
             if (history.length < 8) {
                 sentembed.addField(`Last ${history.length} transactions`, "```" + (history.slice(-8).reverse().join('\n') || "No history yet!") + "```")
             } else {

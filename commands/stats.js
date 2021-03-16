@@ -1,6 +1,14 @@
 const Discord = require("discord.js");
 const db = require("../db")
 const os = require('os')
+let info = {
+    me: {
+        name: "Martin",
+        age: "15 idk",
+        city: "Gaytown",
+        lmao: "Yea lmao"
+    }
+}
 module.exports = {
     name: 'stats',
     description: 'shows bots stats',
