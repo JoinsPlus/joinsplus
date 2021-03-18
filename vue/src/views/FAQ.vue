@@ -118,6 +118,7 @@ export default {
   background-color: #2f3136;
   border-radius: 5px;
   padding-bottom: 5px;
+  margin-right: 8px;
 }
 
 .qcontent {

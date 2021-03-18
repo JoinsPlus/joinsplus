@@ -73,14 +73,14 @@ module.exports = {
                     _id: user._id
                 }, {
                     $push: {
-                        history: `[PAY] Paid ${args[1]} Coins to ${payuser.username || payuser._id}.`
+                        history: `2.1.${payuser._id}.${parseInt(parseFloat(args[1]) * 100) / 100}`
                     }
                 })
                 await db.User.updateOne({
                     _id: payuser._id
                 }, {
                     $push: {
-                        history: `[PAY] Received ${args[1]} Coins from ${user.username || user._id}.`
+                        history: `2.2.${user._id}.${parseInt(parseFloat(args[1]) * 100) / 100}`
                     }
                 })
                 message.channel.send(payedembed).catch(err => { return; });

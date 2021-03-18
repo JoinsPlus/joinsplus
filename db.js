@@ -161,6 +161,17 @@ module.exports = {
             type: Number
         }
     }),
+    Log: mongoose.model('log', {
+        timestamp: {
+            type: Number
+        },
+        cmdCount: {
+            type: Number
+        },
+        discordEvents: {
+            type: Object
+        }
+    }),
     // Boost: mongoose.model('boost', {
     //     valid: {
     //         type: Boolean,

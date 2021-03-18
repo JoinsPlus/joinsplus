@@ -23,8 +23,8 @@ module.exports = {
                 message.delete().catch(err => { return; });
                 console.log(`[EVAL] ${message.author.username} | ${message.author.id} | ${message.content}`)
 
-                const msg = message
-                const client = message.client
+                const msg = message;
+                const client = message.client;
                 
                 let evaled = await eval(data);
                 if (typeof evaled !== "string") {
@@ -47,4 +47,4 @@ module.exports = {
             }
         }
     },
-};
+}

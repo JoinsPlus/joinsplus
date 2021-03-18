@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>API is hosted at {{ api }}</p>
-    <p>Your API token is {{ $store.state.token }}</p>
   </div>
 </template>
 
@@ -18,6 +17,11 @@ export default {
       token: this.$store.state.token,
     };
   },
+  methods: {
+    logout() {
+      this.$store.commit('logout')
+    }
+  }
 };
 
 //console.log(store.state.token);

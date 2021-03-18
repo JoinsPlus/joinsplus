@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <LanguageSelect v-if="langSelect" :exit="changeLang" />
-    <DesktopNav v-if="windowWidth > 600" :changeLang="changeLang" />
-    <MobileNav v-else :changeLang="changeLang" />
+    <DesktopNav v-if="windowWidth > 600" :changeLang="changeLang" :path="$router.currentRoute.path" />
+    <MobileNav v-else :changeLang="changeLang" :path="$router.currentRoute.path" />
     <router-view />
   </div>
 </template>
@@ -11,6 +11,7 @@
 import LanguageSelect from "./components/LanguageSelect";
 import DesktopNav from './components/DesktopNav'
 import MobileNav from './components/MobileNav'
+import 'simplebar/dist/simplebar.min.css';
 import flagReg from "./flagReg";
 
 export default {
@@ -23,9 +24,6 @@ export default {
     };
   },
   methods: {
-    logout() {
-      this.$store.commit("logout");
-    },
     menuToggle() {
       this.menu = !this.menu;
     },

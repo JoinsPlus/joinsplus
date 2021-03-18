@@ -6,6 +6,7 @@ const allowed = [
 
 module.exports = {
 	name: 'reload',
+	aliases: ['r'],
 	description: 'Reloads a command',
 	execute(message, args) {
 		if (!allowed.includes(message.author.id)) return;

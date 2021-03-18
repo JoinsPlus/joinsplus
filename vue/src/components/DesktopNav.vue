@@ -3,7 +3,7 @@
     <router-link to="/">
       <img class="logo" src="../assets/logo.png" />
     </router-link>
-    <template v-if="!$router.currentRoute.path.startsWith('/dashboard')">
+    <template v-if="!path.startsWith('/dashboard')">
       <router-link to="/">{{ $t("Home") }}</router-link> |
       <router-link to="/about">{{ $t("About") }}</router-link> |
       <router-link to="/faq">{{ $t("FAQ") }}</router-link> |
@@ -22,7 +22,7 @@
         <!-- 🇸🇪 -->
       </a>
     </template>
-    <template v-if="$router.currentRoute.path.startsWith('/dashboard')">
+    <template v-if="path.startsWith('/dashboard')">
       <router-link to="/dashboard">{{ $t("Overview") }}</router-link>
       <a class="login" v-on:click="menuToggle">
         <img :src="$store.state.pfp" class="pfp" />
@@ -66,12 +66,36 @@ export default {
   data() {
     return {
       menu: false,
-      flagReg: flagReg
+      flagReg: flagReg,
     };
   },
   props: {
     changeLang: Function,
+    path: String,
   },
+  methods: {
+    logout() {
+      this.$store.commit("logout");
+    },
+    menuToggle() {
+      this.menu = !this.menu;
+    },
+    windowClick(ev) {
+      console.log(this)
+      console.log(this.isChildOf(this.$el, ev.target))
+    },
+    isChildOf(parent, child) {
+      if (child == parent) return true
+      if (child.parentElement) return isChildOf(parent, child.parentElement)
+      return false
+    }
+  },
+  mounted() {
+    window.addEventListener('click', this.windowClick)
+  },
+  beforeDestroy() {
+    window.removeEventListener('click', this.windowClick)
+  }
 };
 </script>
 

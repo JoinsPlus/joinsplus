@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <p v-on:click="toggle" class="clickable">
-      <i class="fas fa-sort-down" :class="open ? 'open' : ''"></i>
+      <i class="fas fa-sort-down" :class="(open ? 'open' : '') + ($store.state.mobileMenu ? ' hidden' : '')"></i>
       <strong>{{ $t(title) }}</strong>
     </p>
     <vue-markdown class="qcontent" v-if="open" :source="$t(content)" />
@@ -37,7 +37,7 @@ export default {
 <style scoped>
 .fas.fa-sort-down {
   padding-right: 15px;
-  transition: transform 0.25s;
+  transition: all 0.25s;
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 10px;
@@ -46,6 +46,9 @@ export default {
 }
 .fas.fa-sort-down.open {
   transform: translateY(-2px);
+}
+.fas.fa-sort-down.hidden {
+  opacity: -5;
 }
 .clickable {
   cursor: pointer;
@@ -84,6 +87,10 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
   height: fit-content;
+}
+
+i.hidden {
+  opacity: 0;
 }
 </style>
 

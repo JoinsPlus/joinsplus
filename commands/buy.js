@@ -69,7 +69,7 @@ module.exports = {
                 _id: message.author.id
             }, {
                 $push: {
-                    history: `[BUY] Bought ${buyamount} Members.`
+                    history: `1.1.${message.guild.id}.${parseInt(buyamount * 100)}`
                 }
             })
             msg.edit(bought).catch(err => { return; })

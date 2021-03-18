@@ -21,9 +21,9 @@ module.exports = {
                 .setTimestamp();
             let history = user.history.toObject();
             if (history.length < 8) {
-                sentembed.addField(`Last ${history.length} transactions`, "```" + (history.slice(-8).reverse().join('\n') || "No history yet!") + "```")
+                sentembed.addField(`Last ${history.length} transactions`, "```\n" + (history.slice(history.length-8, history.length).reverse().join('\n') || "No history yet!") + "```")
             } else {
-                sentembed.addField("Last 8 transactions", "```" + (history.slice(-8).reverse().join('\n') || "No history yet!") + "```")
+                sentembed.addField("Last 8 transactions", "```\n" + (history.slice(history.length-8, history.length).reverse().join('\n') || "No history yet!") + "```")
             }
             sentembed.setFooter(`All transactions: ${history.length}`)
             message.channel.send(sentembed).catch((err) => { return; })

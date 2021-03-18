@@ -5,7 +5,19 @@ process.on('unhandledRejection', (error, promise) => {
 
 require('dotenv').config()
 const Discord = require('discord.js')
-const client = new Discord.Client({ ws: { properties: { $browser: "Discord iOS" } } })
+const client = new Discord.Client({
+    ws: {
+        properties: {
+            $browser: "Discord iOS"
+        }
+    }
+})
+
+const Logger = require('./logging')
+/**
+ * @type {Logger} logger
+ */
+let logger;
 client.commands = new Discord.Collection();
 
 const db = require('./db')
@@ -29,10 +41,11 @@ client.on("ready", () => {
     console.log("[LOGIN] Logged into " + client.user.username)
 })
 client.on("shardReady", (id, unavaiable) => {
+    logger = new Logger(client, id);
     client.user.setActivity(`with Members | ${process.env.PREFIX}help | Shard: ${id + 1}`, { type: 'PLAYING' })
 })
 
-client.on('message', message => {
+/*client.on('message', message => {
     if (message.content == "spam") {
         setInterval(() => {
             const code = db.captchaGen()
@@ -68,7 +81,7 @@ client.on('message', message => {
         })
     }
     robloxreel()
-})
+})*/
 client.on('messageReactionAdd', (reaction, user) => {
     //console.log(reaction.emoji.id);
 });
@@ -168,6 +181,7 @@ client.on('message', async (message) => {
 
     //CMD HANDLER STARTER
     try {
+        logger.logCmd()
         command.execute(message, args, client);
     } catch (error) {
         message.reply('Something went wrong.\n' + `\`${error}\``).catch(err => { return; })
@@ -180,6 +194,7 @@ client.on('shardError', err => {
 
 let checkedusers = [];
 client.on('userUpdate', async (oldUser, newUser) => {
+    if (client.shard.count != parseInt(process.env.SHARD_COUNT)) return;
     let fields = [
         'username',
         'discriminator'
@@ -202,6 +217,7 @@ client.on('userUpdate', async (oldUser, newUser) => {
 })
 client.on('message', async (message) => {
     if (checkedusers.includes(message.author.id)) return;
+    if (client.shard.count != parseInt(process.env.SHARD_COUNT)) return;
     checkedusers.push(message.author.id);
     await db.getUser(message.author.id)
     await db.User.updateOne({
@@ -221,6 +237,7 @@ client.on('message', async (message) => {
 // JUST FOR MARTIN TO SEE HOW DB WORKS
 client.on('message', async (msg) => {
     if (process.env.ISDEBUG !== "true") return; //Only allows execution on beta bot
+    if (client.shard.count != parseInt(process.env.SHARD_COUNT)) return;
     if (msg.content.toLocaleLowerCase() == "profile") {
         let user = await db.getUser(msg.author.id)
         msg.reply(new Discord.MessageEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL()).addField("Coins", user.coins, true).setColor(1146986))
@@ -255,6 +272,7 @@ client.on('message', async (msg) => {
 // JUST FOR TESTING .
 client.on("message", message => {
     if (process.env.ISDEBUG !== "true") return; //Only allows execution on beta bot
+    if (client.shard.count != parseInt(process.env.SHARD_COUNT)) return;
     if (message.content.toLocaleLowerCase() == "test") {
         message.channel.send("Its working.")
     }

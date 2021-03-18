@@ -52,13 +52,16 @@ module.exports = {
                 .setThumbnail(client.user.displayAvatarURL())
                 .setColor(9807270)
                 .setTimestamp();
-                await db.User.updateOne({
-                    _id: message.author.id
-                }, {
-                    $push: {
-                        history: `[DAILY] Claimed 3 Coins.`
-                    }
-                })
+            await db.User.updateOne({
+                _id: message.author.id
+            }, {
+                $inc: {
+                    coins: +300
+                },
+                $push: {
+                    history: `6.1.300`
+                }
+            })
             message.channel.send(coinsembed).catch(err => { return; })
         } else {
             const oncooldownembed = new Discord.MessageEmbed()

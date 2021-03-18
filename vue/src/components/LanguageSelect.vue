@@ -40,11 +40,14 @@
 import i18n from "../i18n";
 import flagReg from "../flagReg";
 import names from "../i18nNames";
+import simplebar from "simplebar-vue";
 import namesLocal from "../i18nNamesLocal";
 
 export default {
   name: "LanguageSelect",
-  components: {},
+  components: {
+    simplebar,
+  },
   methods: {
     close() {
       if (this.$props.exit) this.$props.exit();
@@ -93,7 +96,13 @@ export default {
   border-radius: 10px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 100px;
+  margin-top: 50px;
+  max-height: calc(100vh - 150px);
+  overflow: auto;
+}
+
+.main::-webkit-scrollbar {
+  display: none;
 }
 
 h2 {
@@ -108,10 +117,8 @@ h2 {
   text-align: left;
   background-color: #292b2f;
   border-radius: 8px;
-}
-
-.language {
   margin-top: 10px;
+  min-width: 280px;
 }
 
 .language.selected {

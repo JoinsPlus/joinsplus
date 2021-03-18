@@ -9,7 +9,8 @@ export default new Vuex.Store({
     token: localStorage.token,
     username: localStorage.username || 'Guest',
     pfp: localStorage.pfp,
-    api: new API(this)
+    api: new API(this),
+    mobileMenu: false
   },
   mutations: {
     setToken(state, token) {
@@ -25,8 +26,16 @@ export default new Vuex.Store({
       state.pfp = pfp
     },
     logout(state) {
+      let lang = localStorage.lang
       localStorage.clear()
+      localStorage.lang = lang
       window.location.href = "/"
+    },
+    mobileMenuToggle(state) {
+      state.mobileMenu = !state.mobileMenu
+    },
+    closeMobileMenu(state) {
+      state.mobileMenu = false
     }
   },
   actions: {

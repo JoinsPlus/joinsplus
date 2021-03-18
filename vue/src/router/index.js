@@ -53,6 +53,14 @@ const routes = [
     }
   },
   {
+    path: '/lang/:lang',
+    name: "Change Lang",
+    beforeEnter(to, from, next) {
+      localStorage.lang = to.params.lang
+      window.location.href = '/'
+    }
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard
@@ -75,6 +83,7 @@ router.afterEach((to, from) => {
   Vue.nextTick(() => {
     console.log("parse")
     twemoji.parse(document)
+    store.commit("closeMobileMenu")
   })
 })
 

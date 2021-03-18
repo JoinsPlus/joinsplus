@@ -32,7 +32,7 @@ module.exports = {
                     _id: user._id
                 }, {
                     $push: {
-                        history: `[ADMIN] Admin set your Coins to ${coins / 100}.`
+                        history: `3.3.${parseInt(parseFloat(args[2]) * 100)}`
                     }
                 })
                 message.reply(user.username+" has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
@@ -56,7 +56,7 @@ module.exports = {
                     _id: user._id
                 }, {
                     $push: {
-                        history: `[ADMIN] Admin added ${parseInt(parseFloat(args[2]) * 100) / 100} Coins to you.`
+                        history: `3.1.${parseInt(parseFloat(args[2]) * 100)}`
                     }
                 })
                 message.reply(user.username+" has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
@@ -73,7 +73,7 @@ module.exports = {
                     _id: user._id
                 }, {
                     $push: {
-                        history: `[ADMIN] Admin removed ${parseInt(parseFloat(args[2]) * 100) / 100} Coins from you.`
+                        history: `3.2.${parseInt(parseFloat(args[2]) * 100)}`
                     }
                 })
                 message.reply("User has now " + (user.coins / 100) + " coins.").catch((err) => { return; })
@@ -84,12 +84,19 @@ module.exports = {
                 let user = await db.getUser(args[1])
                 user.daily.lastClaim = 0;
                 await user.save()
+                await db.User.updateOne({
+                    _id: user._id
+                }, {
+                    $push: {
+                        history: `3.6`
+                    }
+                })
                 message.reply(`Reseted ${user.username} daily cooldown!`).catch((err) => { return; })
             } else if (args[0] == "resethistory") {
                 if (!args[1]) return message.reply(`ID missing! \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; });
                 if (isNaN(args[1])) return message.reply(`ID missing \`${process.env.PREFIX}econ resetdaily <ID>\``).catch(err => { return; })
                 let user = await db.getUser(args[1])
-                user.history = ["[ADMIN] History cleared."]
+                user.history = ["3.3"]
                 await user.save()
                 message.reply(`Reseted ${user.username} history.`).catch((err) => { return; })
             } else if (args[0] == "history") {
@@ -117,7 +124,7 @@ module.exports = {
                     _id: user._id
                 }, {
                     $push: {
-                        history: `[ADMIN] Admin msg: ${adminmsg}`
+                        history: `3.4.${adminmsg}`
                     }
                 })
                 message.reply(`Added Admin message to ${user.username}. \n\`${adminmsg}\``).catch((err) => { return; })
