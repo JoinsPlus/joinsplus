@@ -4,8 +4,6 @@ import API from '../api'
 
 Vue.use(Vuex)
 
-console.log(process.env)
-
 export default new Vuex.Store({
   state: {
     token: localStorage.token,
@@ -14,7 +12,7 @@ export default new Vuex.Store({
     api: new API(this),
     mobileMenu: false,
     admin: false,
-    debug: process.env.VUE_APP_DEBUG ? true : false
+    debug: process.env.NODE_ENV == 'development' ? true : false
   },
   mutations: {
     setToken(state, token) {

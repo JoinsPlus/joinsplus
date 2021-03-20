@@ -4,6 +4,8 @@ import twemoji from 'twemoji'
 import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Privacy from '../views/Privacy.vue'
+import NotFound from '../views/NotFound.vue'
+import Debug from '../views/Debug.vue'
 import About from '../views/About.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
@@ -57,13 +59,27 @@ const routes = [
     name: "Change Lang",
     beforeEnter(to, from, next) {
       localStorage.lang = to.params.lang
-      window.location.href = '/'
+      next('/')
     }
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard
+  },
+  {
+    path: '/debug',
+    name: 'Debug',
+    component: Debug,
+    beforeEnter(to, from, next) {
+      if (store.state.debug) return next()
+      next('/')
+    }
+  },
+  {
+    path: '*',
+    name: '404',
+    component: NotFound
   }
 ]
 
@@ -75,10 +91,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.path.startsWith('/dashboard')) {
     if (!store.state.token) return window.location.href = process.env.VUE_APP_API + '/login'
-  }
-  if (to.path.startsWith('/debug')) {
-    if (store.state.debug) return next()
-    next('/')
   }
   next()
 })

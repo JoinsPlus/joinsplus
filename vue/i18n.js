@@ -1,6 +1,7 @@
 const axios = require('axios').default
 const qs = require('qs')
 const fs = require('fs')
+require('dotenv').config()
 
 axios({
     method: 'post',
@@ -9,7 +10,7 @@ axios({
         'Content-Type': 'application/x-www-form-urlencoded'
     },
     data: qs.stringify({
-        api_token: '0efcaaeb258d68841385f84c0887c82f',
+        api_token: process.env.I18N_KEY,
         id: '422847'
     })
 }).then(async (response) => {
@@ -27,7 +28,7 @@ axios({
     }
     fs.writeFileSync('./src/i18n.json', JSON.stringify(output))
 }).catch((err) => {
-
+    console.error(err)
 })
 
 function exportLang(code) {
@@ -39,7 +40,7 @@ function exportLang(code) {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: qs.stringify({
-                api_token: 'd91b5566391a5f9bdd0aff0028e3e488',
+                api_token: process.env.I18N_KEY,
                 id: '422847',
                 language: code,
                 type: 'key_value_json'
