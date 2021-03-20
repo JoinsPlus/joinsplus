@@ -40,8 +40,8 @@ module.exports = {
             noargs(message);
         } else if (args[0]) {
             if (isNaN(args[0])) return errorembed(`${args[0]} is not a Number.`);
-            if (args[0].length > 5) return errorembed(`${args[0]} can only be 5 long.`)
-            if (parseInt(args[0]) > 9999) return errorembed(`${args[0]} :/\nThats a bit to big...`)
+            if (args[0].length > 4) return errorembed(`${args[0]} can only be 5 long.`)
+            if (parseInt(args[0]) > 9999) return errorembed(`${args[0]} :/\nNot sure if this Page exists.`)
             let user = await db.getUser(message.author.id)
             let history = user.history.toObject();
             if (parseInt((history.length / 8) + 1) < parseInt(args[0])) return errorembed(`This page doens\'t exist.\nLast page: ${parseInt((history.length / 8) + 1)}`)

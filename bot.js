@@ -69,8 +69,7 @@ client.on("shardReady", (id, unavaiable) => {
                     robloxreel()
                 } else {
                     if (a == b) return message.channel.send("**ERROR!**, try again later.")
-                    a += a;
-                    message.channel.send(`Nearly finished! ${++a}/${b}`)
+                    message.channel.send(`Nearly finished! ${a++}/${b}`)
                     robloxreel()
                 }
             });

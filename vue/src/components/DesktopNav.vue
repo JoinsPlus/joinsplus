@@ -81,21 +81,22 @@ export default {
       this.menu = !this.menu;
     },
     windowClick(ev) {
-      console.log(this)
-      console.log(this.isChildOf(this.$el, ev.target))
+      function isChildOf(parent, child) {
+        if (child == parent) return true;
+        if (child.parentElement) return isChildOf(parent, child.parentElement);
+        return false;
+      }
+      if (!isChildOf(this.$el, ev.target)) {
+        this.menu = !this.menu
+      }
     },
-    isChildOf(parent, child) {
-      if (child == parent) return true
-      if (child.parentElement) return isChildOf(parent, child.parentElement)
-      return false
-    }
   },
   mounted() {
-    window.addEventListener('click', this.windowClick)
+    window.addEventListener("click", this.windowClick);
   },
   beforeDestroy() {
-    window.removeEventListener('click', this.windowClick)
-  }
+    window.removeEventListener("click", this.windowClick);
+  },
 };
 </script>
 

@@ -76,6 +76,10 @@ router.beforeEach((to, from, next) => {
   if (to.path.startsWith('/dashboard')) {
     if (!store.state.token) return window.location.href = process.env.VUE_APP_API + '/login'
   }
+  if (to.path.startsWith('/debug')) {
+    if (store.state.debug) return next()
+    next('/')
+  }
   next()
 })
 

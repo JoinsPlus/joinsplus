@@ -14,6 +14,16 @@ const app = express()
 
 console.log(process.env.VUE_APP_MAIN)
 
+/**
+ * @param {express.Request} req
+ * @param {express.Response} res
+ * @param {express.NextFunction} next
+ */
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`)
+    next()
+})
+
 app.use(require('./routes'))
 
 app.listen(process.env.PORT, () => {

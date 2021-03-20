@@ -4,13 +4,17 @@ import API from '../api'
 
 Vue.use(Vuex)
 
+console.log(process.env)
+
 export default new Vuex.Store({
   state: {
     token: localStorage.token,
     username: localStorage.username || 'Guest',
     pfp: localStorage.pfp,
     api: new API(this),
-    mobileMenu: false
+    mobileMenu: false,
+    admin: false,
+    debug: process.env.VUE_APP_DEBUG ? true : false
   },
   mutations: {
     setToken(state, token) {

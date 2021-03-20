@@ -1,6 +1,13 @@
 const jws = require('jsonwebtoken')
 const express = require('express')
+const cors = require('cors')
+
 const secret = process.env.JWT_SECRET
+
+const privateCors = {
+    origin: process.env.VUE_APP_MAIN,
+    optionsSuccessStatus: 200
+}
 
 class Session {
     constructor(id) {
@@ -20,6 +27,7 @@ class Session {
             })
         })
     }
+
     /**
      * @param {express.Request} req
      * @param {express.Response} res
@@ -38,6 +46,15 @@ class Session {
         }).catch((err) => {
             res.send(err)
         })
+    }
+    
+    /**
+     * @param {express.Request} req
+     * @param {express.Response} res
+     * @param {express.NextFunction} next
+     */
+    static privateCors(req, res, next) {
+        return cors(privateCors)(req, res, next)
     }
 }
 
